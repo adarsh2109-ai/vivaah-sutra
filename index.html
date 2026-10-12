@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vivaah Sutra - Royal Wedding & Event Concierge</title>
+  <!-- Royal Crown Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts CDN -->
@@ -12,6 +14,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
   <!-- Font Awesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2canvas Library for High-Res Card Image Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     tailwind.config = {
@@ -122,7 +126,12 @@
         </button>
       </nav>
 
-      <div>
+      <div class="flex items-center gap-2">
+        <button onclick="openMyBookingsModal()" class="relative px-3.5 py-2 rounded-full border border-royal-crimson/30 hover:border-royal-crimson text-royal-crimson font-bold text-xs bg-rose-50/70 hover:bg-rose-100/70 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fas fa-receipt"></i>
+          <span class="hidden sm:inline">My Bookings</span>
+          <span id="navBookingsBadge" class="hidden w-4 h-4 rounded-full bg-royal-crimson text-white text-[9px] font-bold items-center justify-center">0</span>
+        </button>
         <button onclick="openConsultationModal()" class="bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-white/40 transition transform hover:scale-105 uppercase tracking-wider flex items-center gap-1.5">
           <i class="fas fa-calendar-check"></i> Book Consultation
         </button>
@@ -212,7 +221,7 @@
         <button onclick="closeVenueDetailModal()" class="px-5 py-2 text-stone-600 hover:text-stone-900 font-semibold text-xs">
           Close
         </button>
-        <button id="modalVenueAddBtn" onclick="" class="px-6 py-2 bg-royal-crimson hover:bg-royal-900 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow">
+        <button id="modalVenueAddBtn" class="px-6 py-2 bg-royal-crimson hover:bg-royal-900 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow">
           Select This Venue
         </button>
       </div>
@@ -275,7 +284,6 @@
     </div>
   </section>
 
-  <!-- MAIN APPLICATION CONTENT CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 py-8">
 
     <!-- TAB 1: SHAHI CATERING -->
@@ -322,9 +330,14 @@
               <li><i class="fas fa-check text-royal-gold mr-1.5"></i> Jalebi Rabdi, Gulab Jamun & Kesar Kulfi</li>
             </ul>
           </div>
-          <button onclick="addToPlan('Rajwada Shahi Thali', 1200, 'plate')" class="w-full bg-royal-crimson text-white py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Add to Plan
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Rajwada Shahi Thali Catering', 1200, 'catering')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Catering Directly
+            </button>
+            <button onclick="addToPlan('Rajwada Shahi Thali', 1200, 'plate', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-royal-gold p-5 flex flex-col justify-between relative transform -translate-y-1">
@@ -340,9 +353,14 @@
               <li><i class="fas fa-check text-royal-gold mr-1.5"></i> Nitrogen Ice-Cream & 6 Indian Sweets</li>
             </ul>
           </div>
-          <button onclick="addToPlan('Mughlai & Global Feast', 1850, 'plate')" class="w-full bg-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-gold-light transition shadow">
-            Add to Plan
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Mughlai & Global Feast Catering', 1850, 'catering')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Catering Directly
+            </button>
+            <button onclick="addToPlan('Mughlai & Global Feast', 1850, 'plate', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:border-royal-gold transition p-5 flex flex-col justify-between">
@@ -357,207 +375,151 @@
               <li><i class="fas fa-check text-royal-gold mr-1.5"></i> Live Crepe, Waffle & Turkish Baklava</li>
             </ul>
           </div>
-          <button onclick="addToPlan('Nawabi Grand Banquet', 2400, 'plate')" class="w-full bg-royal-crimson text-white py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Add to Plan
-          </button>
-        </div>
-      </div>
-
-      <!-- Live Counters Add-ons -->
-      <div class="bg-white p-5 rounded-2xl border border-stone-200 shadow-sm">
-        <h4 class="font-cinzel text-base font-bold text-royal-crimson mb-3 flex items-center gap-2">
-          <span>🔥</span> Signature Live Food Counter Add-ons
-        </h4>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-          <label class="flex items-center gap-2.5 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-royal-cream transition">
-            <input type="checkbox" onchange="toggleAddon('Banarasi Chaat Chowk', 25000, this)" class="accent-royal-crimson w-4 h-4 rounded">
-            <div>
-              <p class="font-bold text-stone-800">Banarasi Chaat Chowk</p>
-              <p class="text-[10px] text-stone-500">₹25,000 / Flat Setup</p>
-            </div>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-royal-cream transition">
-            <input type="checkbox" onchange="toggleAddon('Amritsari Kulcha & Chole', 20000, this)" class="accent-royal-crimson w-4 h-4 rounded">
-            <div>
-              <p class="font-bold text-stone-800">Amritsari Kulcha Live</p>
-              <p class="text-[10px] text-stone-500">₹20,000 / Flat Setup</p>
-            </div>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-royal-cream transition">
-            <input type="checkbox" onchange="toggleAddon('Live Wood-Fired Pizza', 30000, this)" class="accent-royal-crimson w-4 h-4 rounded">
-            <div>
-              <p class="font-bold text-stone-800">Wood-Fired Pizza Oven</p>
-              <p class="text-[10px] text-stone-500">₹30,000 / Flat Setup</p>
-            </div>
-          </label>
-          <label class="flex items-center gap-2.5 p-3 rounded-xl border border-stone-200 cursor-pointer hover:bg-royal-cream transition">
-            <input type="checkbox" onchange="toggleAddon('Liquid Nitrogen Kulfi & Smoke', 35000, this)" class="accent-royal-crimson w-4 h-4 rounded">
-            <div>
-              <p class="font-bold text-stone-800">Liquid Nitrogen Kulfi</p>
-              <p class="text-[10px] text-stone-500">₹35,000 / Flat Setup</p>
-            </div>
-          </label>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Nawabi Grand Banquet Catering', 2400, 'catering')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Catering Directly
+            </button>
+            <button onclick="addToPlan('Nawabi Grand Banquet', 2400, 'plate', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: WEDDING CARDS STUDIO (Clean without '50') -->
+    <!-- TAB 2: WEDDING CARDS STUDIO -->
     <section id="sec-card" class="tab-content hidden">
       <div class="text-center mb-6">
-        <span class="text-royal-gold font-bold uppercase tracking-widest text-xs">Designer E-Invites, QR & Audio Studio</span>
-        <h3 class="text-3xl font-cinzel font-bold text-royal-crimson">Wedding Cards Studio</h3>
-        <p class="text-stone-600 text-xs mt-1">Apni pasand ka card chunein, couple photo upload karein, venue QR code generate karein aur WhatsApp par share karein</p>
+        <span class="text-royal-gold font-bold uppercase tracking-widest text-xs">Royal Invitation Studio</span>
+        <h3 class="text-3xl font-cinzel font-bold text-royal-crimson">Designer Wedding Cards Studio</h3>
+        <p class="text-stone-600 text-xs mt-1">Live designer with Sanskrit shlokas, couple photo upload, audio voiceover and instant PNG export</p>
       </div>
 
-      <!-- Categories Filter -->
-      <div class="flex flex-wrap items-center justify-center gap-2 mb-6">
-        <button onclick="filterCards('all')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-royal-crimson text-white shadow">All Themes</button>
-        <button onclick="filterCards('heritage')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 border border-royal-gold/40">Royal Heritage</button>
-        <button onclick="filterCards('floral')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 border border-royal-gold/40">Floral & Pastel</button>
-        <button onclick="filterCards('minimal')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 border border-royal-gold/40">Modern Minimal</button>
-        <button onclick="filterCards('luxury')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 border border-royal-gold/40">Luxury Dark</button>
-        <button onclick="filterCards('regional')" class="card-filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-700 border border-royal-gold/40">Traditional Regional</button>
+      <!-- Categories Filter Bar -->
+      <div class="flex flex-wrap items-center justify-center gap-2 mb-6 text-xs">
+        <button onclick="filterCards('all')" class="card-filter-btn px-4 py-1.5 rounded-full bg-royal-crimson text-white font-semibold transition shadow-sm">All Themes</button>
+        <button onclick="filterCards('heritage')" class="card-filter-btn px-4 py-1.5 rounded-full bg-white text-stone-700 font-semibold border border-stone-200 hover:border-royal-gold transition">Heritage Rajwada</button>
+        <button onclick="filterCards('luxury')" class="card-filter-btn px-4 py-1.5 rounded-full bg-white text-stone-700 font-semibold border border-stone-200 hover:border-royal-gold transition">Imperial Luxury</button>
+        <button onclick="filterCards('floral')" class="card-filter-btn px-4 py-1.5 rounded-full bg-white text-stone-700 font-semibold border border-stone-200 hover:border-royal-gold transition">Pastel & Floral</button>
+        <button onclick="filterCards('minimal')" class="card-filter-btn px-4 py-1.5 rounded-full bg-white text-stone-700 font-semibold border border-stone-200 hover:border-royal-gold transition">Modern Minimalist</button>
+        <button onclick="filterCards('regional')" class="card-filter-btn px-4 py-1.5 rounded-full bg-white text-stone-700 font-semibold border border-stone-200 hover:border-royal-gold transition">Regional Traditional</button>
       </div>
 
-      <!-- Dual Panel Customizer -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-10">
-        <!-- Controls (5 cols) -->
-        <div class="lg:col-span-5 bg-white p-5 rounded-2xl shadow-md border border-royal-gold/30 space-y-3.5 text-xs">
-          <div class="flex items-center justify-between border-b pb-2">
-            <h4 class="font-cinzel font-bold text-base text-royal-crimson">Card Live Studio</h4>
-            <span class="text-[10px] text-royal-gold font-semibold" id="activeThemeLabel">#1 Rajasthani Crimson</span>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-8">
+        <!-- Card Customizer Controls Form -->
+        <div class="lg:col-span-5 bg-white p-6 rounded-3xl border border-royal-gold/30 shadow-md space-y-4 text-xs">
+          <div class="flex items-center justify-between border-b pb-3">
+            <h4 class="font-cinzel font-bold text-base text-royal-crimson">Customize Card Content</h4>
+            <span id="activeThemeLabel" class="text-[10px] text-royal-gold font-bold uppercase tracking-wider">#1 Royal Crimson</span>
           </div>
 
-          <div>
-            <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Auspicious Motif</label>
-            <select id="inpMotif" onchange="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs focus:outline-none focus:border-royal-gold">
-              <option value="🕉️">🕉️ Om Symbol</option>
-              <option value="卐">卐 Swastik</option>
-              <option value="🦚">🦚 Royal Peacock</option>
-              <option value="⚜️">⚜️ Imperial Royal Crest</option>
-              <option value="🪷">🪷 Sacred Lotus</option>
-              <option value="🐘">🐘 Royal Elephant</option>
-              <option value="✨">✨ Starlight Glint</option>
-            </select>
-          </div>
-
-          <!-- Photo Upload & QR Option -->
-          <div class="grid grid-cols-2 gap-2 p-2.5 bg-royal-cream border border-royal-gold/30 rounded-xl">
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Couple Photo</label>
-              <input type="file" id="inpCouplePhoto" accept="image/*" onchange="handleCouplePhotoUpload(this)" class="w-full text-[10px] text-stone-500 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-royal-crimson file:text-white cursor-pointer">
+              <label class="block font-semibold text-stone-700 mb-1">Groom's Name</label>
+              <input type="text" id="inpGroom" value="Aarav" oninput="refreshCardPreview()" class="w-full border rounded-lg p-2 focus:border-royal-gold focus:outline-none">
             </div>
             <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Location Maps QR</label>
-              <button type="button" onclick="toggleCardVenueQr()" id="btnToggleQr" class="w-full py-1.5 px-2 bg-royal-950 text-royal-gold-light rounded text-[10px] font-bold border border-royal-gold/40 flex items-center justify-center gap-1">
-                <span>📍</span> <span id="btnToggleQrText">Show QR Code</span>
-              </button>
+              <label class="block font-semibold text-stone-700 mb-1">Bride's Name</label>
+              <input type="text" id="inpBride" value="Ananya" oninput="refreshCardPreview()" class="w-full border rounded-lg p-2 focus:border-royal-gold focus:outline-none">
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-2 gap-3">
             <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Groom's Name</label>
-              <input type="text" id="inpGroom" value="Aarav Sharma" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">
+              <label class="block font-semibold text-stone-700 mb-1">Wedding Date</label>
+              <input type="text" id="inpDate" value="14th December 2026" oninput="refreshCardPreview()" class="w-full border rounded-lg p-2 focus:border-royal-gold focus:outline-none">
             </div>
             <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Bride's Name</label>
-              <input type="text" id="inpBride" value="Ananya Rathore" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">
-            </div>
-          </div>
-
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Wedding Date</label>
-              <input type="text" id="inpDate" value="Sunday, 14th December 2026" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">
-            </div>
-            <div>
-              <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Muhurat / Time</label>
-              <input type="text" id="inpTime" value="07:00 PM Onwards" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">
+              <label class="block font-semibold text-stone-700 mb-1">Card Motif Symbol</label>
+              <select id="inpMotif" onchange="refreshCardPreview()" class="w-full border rounded-lg p-2 bg-stone-50 focus:border-royal-gold">
+                <option value="🕉️">🕉️ Om / Vedic</option>
+                <option value="🪷">🪷 Royal Lotus</option>
+                <option value="👑">👑 Royal Crown</option>
+                <option value="🦚">🦚 Sacred Peacock</option>
+                <option value="🐘">🐘 Royal Elephant</option>
+              </select>
             </div>
           </div>
 
           <div>
-            <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Venue & Location</label>
-            <input type="text" id="inpVenue" value="The Oberoi Udaivilas, Lake Pichola, Udaipur" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">
+            <label class="block font-semibold text-stone-700 mb-1">Venue / Palace Details</label>
+            <input type="text" id="inpVenue" value="The Oberoi Udaivilas, Udaipur" oninput="refreshCardPreview()" class="w-full border rounded-lg p-2 focus:border-royal-gold focus:outline-none">
           </div>
 
           <div>
-            <label class="block font-bold text-stone-600 uppercase text-[10px] mb-1">Host / Blessing Line</label>
-            <textarea id="inpHost" rows="2" oninput="refreshCardPreview()" class="w-full bg-stone-50 border border-stone-300 rounded-lg p-2 text-xs">Sharma & Rathore Family Cordially Invites You</textarea>
-          </div>
-
-          <!-- AI Tools inside Card Studio -->
-          <div class="bg-amber-50/70 border border-royal-gold/40 rounded-xl p-3 space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="text-[11px] font-bold text-royal-950 flex items-center gap-1.5">
-                <span class="text-royal-gold">✨</span> Vivaah AI Card Suite
-              </span>
-              <span class="text-[9px] bg-royal-900 text-royal-gold-light px-2 py-0.5 rounded-full font-semibold">AI Shloka & Voice</span>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2">
-              <button type="button" onclick="generateAiCardShloka()" id="btnAiShloka" class="py-2 px-2 bg-white hover:bg-amber-50 border border-royal-gold text-royal-900 font-bold rounded-lg text-[10px] flex items-center justify-center gap-1 shadow-sm transition">
-                <span>📜</span> <span id="btnAiShlokaText">AI Shloka / Shayari</span>
-              </button>
-              <button type="button" onclick="generateAiCardAudioVoiceover()" id="btnAiVoice" class="py-2 px-2 bg-royal-950 hover:bg-royal-900 text-royal-gold-light border border-royal-gold/40 font-bold rounded-lg text-[10px] flex items-center justify-center gap-1 shadow-sm transition">
-                <span>🎙️</span> <span id="btnAiVoiceText">Audio Invite</span>
+            <div class="flex justify-between items-center mb-1">
+              <label class="font-semibold text-stone-700">Auspicious Blessing / Host Line</label>
+              <button onclick="generateAiCardShloka()" class="text-[10px] text-royal-gold-dark hover:text-royal-crimson font-bold flex items-center gap-1">
+                <span>✨</span> AI Shloka
               </button>
             </div>
+            <textarea id="inpHost" rows="2" oninput="refreshCardPreview()" class="w-full border rounded-lg p-2 focus:border-royal-gold focus:outline-none">मंगलम् भगवान विष्णुः मंगलम् गरुड़ध्वजः। Aarav एवं Ananya के शुभ परिणय में सपरिवार सादर आमंत्रित हैं।</textarea>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="grid grid-cols-2 gap-2 pt-1">
-            <button onclick="shareWhatsAppCard()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow">
-              <i class="fab fa-whatsapp text-sm"></i> WhatsApp Invite
+          <!-- Feature Toggles -->
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t">
+            <button onclick="toggleCardVenueQr()" class="p-2 border border-royal-gold/40 rounded-xl hover:bg-royal-cream text-[11px] font-semibold text-stone-700 flex items-center justify-center gap-1.5 transition">
+              <i class="fas fa-qrcode text-royal-gold"></i> <span id="btnToggleQrText">Show Venue QR</span>
             </button>
-            <button onclick="window.print()" class="bg-royal-crimson hover:bg-royal-900 text-white font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow">
-              <i class="fas fa-print text-sm"></i> Print / PDF
+            <label class="p-2 border border-royal-gold/40 rounded-xl hover:bg-royal-cream text-[11px] font-semibold text-stone-700 flex items-center justify-center gap-1.5 transition cursor-pointer">
+              <i class="fas fa-camera text-royal-gold"></i> Couple Photo
+              <input type="file" id="inpCouplePhoto" accept="image/*" onchange="handleCouplePhotoUpload(this)" class="hidden">
+            </label>
+          </div>
+
+          <!-- Actions -->
+          <div class="grid grid-cols-2 gap-2 pt-1">
+            <button onclick="generateAiCardAudioVoiceover()" class="py-2.5 bg-royal-950 hover:bg-royal-900 text-royal-gold-light rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow transition">
+              <i class="fas fa-volume-up"></i> Voiceover Invite
+            </button>
+            <button onclick="downloadCardImage()" class="py-2.5 bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow transition">
+              <i class="fas fa-download"></i> Save as Image
             </button>
           </div>
         </div>
 
-        <!-- Live Card Preview (7 cols) -->
-        <div class="lg:col-span-7 flex justify-center items-center">
+        <!-- Live Card Render Container -->
+        <div class="lg:col-span-7 flex flex-col items-center justify-center">
           <div id="live-card-container" class="w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border-4 relative transition-all duration-300 min-h-[550px] flex flex-col justify-between bg-gradient-to-br from-[#4a0814] to-[#1c0207] text-[#fae19c] border-[#d4af37]">
             <!-- Auspicious Header -->
-            <div>
-              <div id="dispCardMotif" class="text-4xl mb-2 drop-shadow">🕉️</div>
-              <p class="text-[11px] tracking-widest font-serif opacity-90 uppercase">॥ श्री गणेशाय नमः ॥</p>
-              <div class="w-20 h-0.5 bg-current mx-auto my-3 opacity-60"></div>
-              <p id="dispCardHost" class="text-xs uppercase tracking-wider font-light opacity-90 max-w-xs mx-auto leading-relaxed">
-                Sharma & Rathore Family Cordially Invites You
-              </p>
+            <div class="space-y-2">
+              <div id="dispMotif" class="text-3xl filter drop-shadow">🕉️</div>
+              <p class="text-[10px] tracking-[0.3em] uppercase opacity-90 font-cinzel">|| Shubh Vivah ||</p>
+              <div class="w-16 h-0.5 bg-current mx-auto opacity-40 my-2"></div>
             </div>
 
-            <!-- Couple Photo (Optional preview) -->
-            <div id="dispCouplePhotoWrapper" class="hidden my-2">
-              <img id="dispCouplePhotoImg" src="" alt="Couple Photo" class="w-24 h-24 object-cover rounded-full mx-auto border-2 border-current shadow-lg">
+            <!-- Couple Photo Frame (Hidden until uploaded) -->
+            <div id="dispCouplePhotoWrapper" class="hidden my-3 mx-auto">
+              <img id="dispCouplePhotoImg" src="" alt="Couple" class="w-24 h-24 rounded-full object-cover border-2 border-white/60 shadow-lg mx-auto">
             </div>
 
             <!-- Couple Names -->
-            <div class="my-4">
-              <span class="text-[10px] uppercase tracking-widest block mb-1 opacity-80">Save The Date For</span>
-              <h2 id="dispCardGroom" class="text-3xl font-cinzel font-extrabold tracking-wide">Aarav Sharma</h2>
-              <div class="font-vibes text-3xl my-1 text-royal-gold-light">&</div>
-              <h2 id="dispCardBride" class="text-3xl font-cinzel font-extrabold tracking-wide">Ananya Rathore</h2>
+            <div class="my-4 space-y-1">
+              <h2 id="dispGroomName" class="font-cinzel font-black text-3xl tracking-wide">Aarav</h2>
+              <span class="font-vibes text-2xl opacity-80 block my-0.5">weds</span>
+              <h2 id="dispBrideName" class="font-cinzel font-black text-3xl tracking-wide">Ananya</h2>
             </div>
 
-            <!-- Event Details & Location QR Code -->
-            <div>
-              <div class="border-y border-current/30 py-3 my-2 text-xs space-y-1">
-                <p id="dispCardDate" class="font-bold tracking-wider">Sunday, 14th December 2026</p>
-                <p id="dispCardTime" class="text-[11px] opacity-80 font-light">07:00 PM Onwards</p>
+            <!-- Shloka and Details -->
+            <div class="space-y-3">
+              <p id="dispHostLine" class="text-[11px] leading-relaxed italic opacity-90 max-w-xs mx-auto">
+                मंगलम् भगवान विष्णुः मंगलम् गरुड़ध्वजः। Aarav एवं Ananya के शुभ परिणय में सपरिवार सादर आमंत्रित हैं।
+              </p>
+              <div class="py-2 border-y border-current/20 max-w-xs mx-auto">
+                <p id="dispDate" class="font-cinzel font-bold text-sm tracking-wider">14th December 2026</p>
+                <p id="dispVenue" class="text-[11px] font-medium opacity-90 mt-0.5">The Oberoi Udaivilas, Udaipur</p>
               </div>
-              <p id="dispCardVenue" class="text-xs font-medium max-w-xs mx-auto leading-relaxed mt-2 opacity-95">The Oberoi Udaivilas, Lake Pichola, Udaipur</p>
+            </div>
 
-              <!-- Location QR Display -->
-              <div id="dispCardVenueQr" class="hidden mt-3 p-2 bg-white rounded-xl inline-block shadow">
-                <img id="dispCardQrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur" alt="Venue Maps QR" class="w-16 h-16 mx-auto">
-                <p class="text-[8px] text-stone-800 font-bold uppercase mt-1">Scan for Venue Maps</p>
-              </div>
+            <!-- Venue QR Code (Hidden until toggled) -->
+            <div id="dispCardVenueQr" class="hidden my-2">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur" alt="Venue QR" class="w-16 h-16 mx-auto rounded-lg border border-white/40 p-1 bg-white">
+              <span class="text-[8px] uppercase tracking-wider block mt-1 opacity-75">Scan for Venue Location</span>
+            </div>
 
-              <p class="text-[10px] mt-3 opacity-70 tracking-widest uppercase">Blessings & Best Compliments</p>
+            <!-- Footer Line -->
+            <div class="pt-3 border-t border-current/20 text-[9px] uppercase tracking-widest opacity-80">
+              Vivaah Sutra Bespoke Heritage Invitation
             </div>
           </div>
         </div>
@@ -605,9 +567,14 @@
             <p class="text-xs text-stone-600 my-2">Drone teaser, candid couple shoot, pre-wedding reels, 2 traditional video albums & live LED feeds.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹1,85,000 <span class="text-xs text-stone-500 font-normal">/ 3 Days</span></div>
           </div>
-          <button onclick="addToPlan('Royal Lens 4K Cinematography', 185000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Photographer
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Royal Lens 4K Cinematography', 185000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Photographer Now
+            </button>
+            <button onclick="addToPlan('Royal Lens 4K Cinematography', 185000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <!-- Vendor 2: Bridal Makeup & Mehndi -->
@@ -621,9 +588,14 @@
             <p class="text-xs text-stone-600 my-2">HD Airbrush bridal look, pre-bridal spa, hair extensions, Haldi look, plus Marwari bridal mehndi.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹75,000 <span class="text-xs text-stone-500 font-normal">/ Full Bridal Package</span></div>
           </div>
-          <button onclick="addToPlan('Shringar Luxe Bridal Makeup & Mehndi', 75000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Makeup Artist
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Shringar Luxe Bridal Makeup & Mehndi', 75000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Makeup Artist Now
+            </button>
+            <button onclick="addToPlan('Shringar Luxe Bridal Makeup & Mehndi', 75000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <!-- Vendor 3: Mandap & Floral Decor -->
@@ -637,9 +609,14 @@
             <p class="text-xs text-stone-600 my-2">Grand 4-pillar Sheesh Mandap, 20,000 marigold & rose hanging bells, royal rajputana entrance arch.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹3,50,000 <span class="text-xs text-stone-500 font-normal">/ Complete Decor</span></div>
           </div>
-          <button onclick="addToPlan('Rajwada Floral Mandap Decor', 350000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Mandap Decor
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Rajwada Floral Mandap Decor', 350000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Mandap Decor Now
+            </button>
+            <button onclick="addToPlan('Rajwada Floral Mandap Decor', 350000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <!-- Vendor 4: Vintage Baraat Cars & Royal Bagghi -->
@@ -653,9 +630,14 @@
             <p class="text-xs text-stone-600 my-2">1938 Style vintage convertible car or 4-white-horse royal lit buggy with floral decorations for groom.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹45,000 <span class="text-xs text-stone-500 font-normal">/ Baraat Procession</span></div>
           </div>
-          <button onclick="addToPlan('Vintage Baraat Car & Royal Bagghi', 45000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Royal Entry
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Vintage Baraat Car & Royal Bagghi', 45000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Royal Entry Now
+            </button>
+            <button onclick="addToPlan('Vintage Baraat Car & Royal Bagghi', 45000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <!-- Vendor 5: Vedic Pandit Ji & Muhurat -->
@@ -669,9 +651,14 @@
             <p class="text-xs text-stone-600 my-2">Senior Acharya for Ganesh Pujan, Mandap Muhurat, Saat Phere, Kanyadaan with full pooja samagri.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹25,000 <span class="text-xs text-stone-500 font-normal">/ Complete Vivah Ritual</span></div>
           </div>
-          <button onclick="addToPlan('Vedic Pandit Ji & Pooja Samagri', 25000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Pandit Ji
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Vedic Pandit Ji & Pooja Samagri', 25000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Pandit Ji Now
+            </button>
+            <button onclick="addToPlan('Vedic Pandit Ji & Pooja Samagri', 25000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <!-- Vendor 6: Pyrotechnics & Cold Pyro -->
@@ -685,9 +672,14 @@
             <p class="text-xs text-stone-600 my-2">Dry-ice dancing cloud floor, 12 remote cold-spark fountains for Varmala stage, and CO2 confetti blast.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹30,000 <span class="text-xs text-stone-500 font-normal">/ Varmala & Entry</span></div>
           </div>
-          <button onclick="addToPlan('Varmala Cold Pyro & Fog FX', 30000, 'fixed')" class="w-full bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Special Effects
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Varmala Cold Pyro & Fog FX', 30000, 'vendor')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Special FX Now
+            </button>
+            <button onclick="addToPlan('Varmala Cold Pyro & Fog FX', 30000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -710,9 +702,14 @@
             <p class="text-xs text-stone-600 my-2">11 Master Dholis with traditional pagdis, LED bhangra troupe, and grand baraat entry pyro effects.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹35,000 <span class="text-xs text-stone-500 font-normal">/ Baraat</span></div>
           </div>
-          <button onclick="addToPlan('Punjabi Dhol Tasha Crew', 35000, 'fixed')" class="w-full bg-royal-crimson text-white py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Dhol Troupe
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Punjabi Dhol Tasha Crew', 35000, 'dj')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Dhol Troupe Now
+            </button>
+            <button onclick="addToPlan('Punjabi Dhol Tasha Crew', 35000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 shadow-md border-2 border-royal-gold flex flex-col justify-between">
@@ -724,9 +721,14 @@
             <p class="text-xs text-stone-600 my-2">Top Bollywood wedding DJ, concert audio system, CO2 cold-pyro guns, and intelligent moving beams.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹85,000 <span class="text-xs text-stone-500 font-normal">/ Night</span></div>
           </div>
-          <button onclick="addToPlan('Bollywood DJ & LED Wall', 85000, 'fixed')" class="w-full bg-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-gold-light transition shadow">
-            Book DJ & Lights
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Bollywood Sangeet DJ & LED Wall', 85000, 'dj')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book DJ Directly
+            </button>
+            <button onclick="addToPlan('Bollywood DJ & LED Wall', 85000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
 
         <div class="bg-white rounded-2xl p-5 shadow-sm border border-stone-200 flex flex-col justify-between">
@@ -738,14 +740,19 @@
             <p class="text-xs text-stone-600 my-2">Soulful 6-piece Sufi/Ghazal ensemble with santoor, flute, and lead vocalists for cocktails & dinner.</p>
             <div class="text-xl font-bold text-royal-gold my-2">₹65,000 <span class="text-xs text-stone-500 font-normal">/ Evening</span></div>
           </div>
-          <button onclick="addToPlan('Royal Sufi Band', 65000, 'fixed')" class="w-full bg-royal-crimson text-white py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-            Book Live Band
-          </button>
+          <div class="space-y-2">
+            <button onclick="openDirectBooking('Royal Sufi & Acoustic Band', 65000, 'dj')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+              <i class="fas fa-calendar-check"></i> Book Live Band Now
+            </button>
+            <button onclick="addToPlan('Royal Sufi Band', 65000, 'fixed', this)" class="w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition">
+              + Add to Plan
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 6: HOTELS & BANQUETS (WITH DIRECT CALL BUTTONS) -->
+    <!-- TAB 6: HOTELS & BANQUETS -->
     <section id="sec-hotels" class="tab-content hidden">
       <div class="text-center mb-8">
         <span class="text-royal-gold font-bold uppercase tracking-widest text-xs">Accommodations & Banquets</span>
@@ -965,6 +972,115 @@
     </div>
   </div>
 
+  <!-- DIRECT BOOKING MODAL -->
+  <div id="directBookingModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 md:p-6 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 relative border-2 border-royal-gold shadow-2xl my-auto">
+      <button onclick="closeDirectBookingModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-lg">✕</button>
+      
+      <div class="text-center mb-4">
+        <span id="bookingModalBadge" class="inline-block bg-royal-gold/20 text-royal-crimson text-[10px] px-3 py-0.5 rounded-full uppercase tracking-wider font-bold mb-1">
+          Instant Direct Booking
+        </span>
+        <h3 id="bookingModalTitle" class="font-cinzel font-bold text-xl text-royal-crimson">Confirm Royal Reservation</h3>
+      </div>
+
+      <div class="bg-royal-cream p-3 rounded-2xl border border-royal-gold/30 mb-4 text-xs">
+        <div class="flex justify-between items-center font-bold text-stone-800">
+          <span id="bookSummaryName">Service Name</span>
+          <span id="bookSummaryAdvance" class="text-royal-crimson font-mono">20% Token: ₹0</span>
+        </div>
+        <p id="bookSummaryMeta" class="text-[10px] text-stone-500 mt-0.5">Total Estimate: ₹0</p>
+      </div>
+
+      <form onsubmit="handleDirectBookingSubmit(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="bookItemName">
+        <input type="hidden" id="bookItemPrice">
+        <input type="hidden" id="bookItemType">
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Your Full Name *</label>
+            <input type="text" id="bookClientName" required placeholder="e.g. Adarsh Pandey" class="w-full border border-stone-300 rounded-lg p-2 text-xs focus:border-royal-gold focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">WhatsApp Phone *</label>
+            <input type="tel" id="bookClientPhone" required placeholder="+91 98765 43210" class="w-full border border-stone-300 rounded-lg p-2 text-xs focus:border-royal-gold focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">City of Event</label>
+            <input type="text" id="bookClientCity" placeholder="e.g. Udaipur / Jaipur" class="w-full border border-stone-300 rounded-lg p-2 text-xs focus:border-royal-gold focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Special Requests</label>
+            <input type="text" id="bookClientNotes" placeholder="e.g. Pure Jain / VIP Baraat" class="w-full border border-stone-300 rounded-lg p-2 text-xs focus:border-royal-gold focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Dynamic Fields Container based on Category -->
+        <div id="bookingDynamicFields" class="space-y-2 pt-1 border-t border-stone-200"></div>
+
+        <button type="submit" class="w-full bg-gradient-to-r from-royal-crimson to-royal-900 hover:from-royal-900 hover:to-royal-crimson text-white font-bold py-3 rounded-xl uppercase tracking-wider text-xs shadow-lg transition mt-2">
+          Lock Date & Generate Booking Slip
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- BOOKING CONFIRMATION SLIP MODAL -->
+  <div id="bookingConfirmationModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 md:p-6 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 relative border-2 border-royal-gold shadow-2xl my-auto">
+      <button onclick="closeBookingConfirmationModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-lg">✕</button>
+      
+      <div class="text-center mb-4">
+        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-2 text-2xl shadow-inner">
+          ✓
+        </div>
+        <h3 class="font-cinzel font-bold text-xl text-royal-crimson">Royal Booking Confirmed!</h3>
+        <p class="text-[11px] text-stone-500">Your reservation has been officially registered with our senior concierge desk.</p>
+      </div>
+
+      <div id="bookingSlipContent" class="space-y-3"></div>
+
+      <div class="grid grid-cols-2 gap-2 mt-4">
+        <button id="btnVoucherWhatsApp" class="py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
+          <i class="fab fa-whatsapp"></i> WhatsApp Slip
+        </button>
+        <button onclick="downloadBookingSlipImage()" class="py-2.5 bg-royal-950 hover:bg-royal-900 text-royal-gold-light rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow transition">
+          <i class="fas fa-file-download"></i> Save Slip Image
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY BOOKINGS DASHBOARD MODAL -->
+  <div id="myBookingsModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 md:p-6 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 relative border-2 border-royal-gold shadow-2xl my-auto">
+      <button onclick="closeMyBookingsModal()" class="absolute top-4 right-4 text-stone-400 hover:text-stone-700 font-bold text-lg">✕</button>
+      
+      <div class="flex items-center justify-between border-b pb-3 mb-4">
+        <div>
+          <h3 class="font-cinzel font-bold text-xl text-royal-crimson">My Royal Bookings</h3>
+          <p class="text-[10px] text-stone-500">Track and manage all your confirmed wedding services</p>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-stone-400 block uppercase">Total Committed:</span>
+          <span id="myBookingsTotalValue" class="font-cinzel font-bold text-base text-royal-crimson">₹0</span>
+        </div>
+      </div>
+
+      <div id="myBookingsListContainer" class="space-y-3 max-h-[55vh] overflow-y-auto custom-scrollbar p-1"></div>
+
+      <div class="mt-4 pt-3 border-t text-center">
+        <button onclick="closeMyBookingsModal()" class="px-6 py-2 bg-royal-950 text-royal-gold-light font-bold text-xs rounded-xl uppercase tracking-wider hover:bg-royal-900 transition">
+          Back to Planner
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- CONSULTATION MODAL -->
   <div id="consultationModal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white rounded-3xl max-w-md w-full p-6 relative border-2 border-royal-gold shadow-2xl">
@@ -976,20 +1092,20 @@
       <form onsubmit="handleConsultSubmit(event)" class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Aapka Naam</label>
-          <input type="text" required placeholder="e.g. Adarsh Pandey" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
+          <input type="text" id="consultClientName" required placeholder="e.g. Adarsh Pandey" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
         </div>
         <div>
           <label class="block font-semibold text-stone-700 mb-1">Phone Number (WhatsApp)</label>
-          <input type="tel" required placeholder="+91 98765 43210" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
+          <input type="tel" id="consultClientPhone" required placeholder="+91 98765 43210" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Wedding City</label>
-            <input type="text" placeholder="e.g. Udaipur" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
+            <input type="text" id="consultClientCity" placeholder="e.g. Udaipur" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
           </div>
           <div>
             <label class="block font-semibold text-stone-700 mb-1">Estimated Guests</label>
-            <input type="number" placeholder="e.g. 500" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
+            <input type="number" id="consultClientGuests" placeholder="e.g. 500" class="w-full border rounded-lg p-2.5 focus:border-royal-gold focus:outline-none">
           </div>
         </div>
         <button type="submit" class="w-full bg-royal-crimson hover:bg-royal-900 text-white font-bold py-3 rounded-xl uppercase tracking-wider text-xs transition shadow mt-2">
@@ -1029,230 +1145,517 @@
       { id: 20, name: "Jaipur Pink Palace", cat: "heritage", bg: "bg-gradient-to-br from-[#db2777] to-[#9d174d]", text: "text-[#fdf2f8]", border: "border-[#f472b6]" }
     ];
 
+    /* Destination palaces dataset */
+    const destinationPlaces = [
+      {
+        id: "udaivilas",
+        title: "The Oberoi Udaivilas",
+        category: "Lakeside Royal Palace",
+        city: "Udaipur, Rajasthan",
+        rating: "4.8",
+        reviews: "3,820+ Verified Reviews",
+        price: 4500000,
+        priceDisplay: "₹45,00,000 / 3-Day Wedding Package",
+        capacity: "Capacity: 800 Guests | 87 Heritage Luxury Suites",
+        phone: "+91 294 243 3300",
+        mapsUrl: "https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur",
+        mainImg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Situated on the banks of Lake Pichola, Oberoi Udaivilas offers Mewari architectural splendour with sprawling courtyards, ripple fountains, reflection pools and royal sunset mandap platforms.",
+        amenities: ["Lakeside Sunset Mandap", "Private Boat Transfer for Guests", "Mewar Sheesh Mahal Banquet", "Helipad Access", "Valet Parking for 200 Cars"]
+      },
+      {
+        id: "lakepalace",
+        title: "Taj Lake Palace",
+        category: "Island Heritage Palace",
+        city: "Lake Pichola, Udaipur",
+        rating: "4.8",
+        reviews: "4,150+ Verified Reviews",
+        price: 5500000,
+        priceDisplay: "₹55,00,000 / Complete Island Buyout",
+        capacity: "Capacity: 450 Guests | 65 Heritage Palace Rooms",
+        phone: "+91 294 246 0101",
+        mapsUrl: "https://maps.google.com/?q=Taj+Lake+Palace+Udaipur",
+        mainImg: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Built in 1746, this white-marble marvel floating in the middle of Lake Pichola offers the most romantic fairytale wedding setting in India with royal royal shikara entries.",
+        amenities: ["Floating Island Ceremony", "Private Royal Shikar Groom Entry", "Jharokha Cocktail Terrace", "Heritage Spa", "Full Island Buyout"]
+      },
+      {
+        id: "rambagh",
+        title: "Rambagh Palace",
+        category: "Jewel of Jaipur Palace",
+        city: "Jaipur, Rajasthan",
+        rating: "4.7",
+        reviews: "3,400+ Verified Reviews",
+        price: 4800000,
+        priceDisplay: "₹48,00,000 / Royal Celebration",
+        capacity: "Capacity: 1,200 Guests | 78 Grand Heritage Suites",
+        phone: "+91 141 221 1919",
+        mapsUrl: "https://maps.google.com/?q=Rambagh+Palace+Jaipur",
+        mainImg: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Former residence of the Maharaja of Jaipur. Rambagh Palace boasts Mughal garden baradaris, ornamental marble gardens, and grand halls perfect for aristocratic Indian nuptials.",
+        amenities: ["Maharaja Elephant Procession", "Jaigarh Baradari Lawn", "Grand Ballroom", "Suvarna Mahal Royal Dining", "24-Hour Butler Service"]
+      },
+      {
+        id: "umaidbhawan",
+        title: "Umaid Bhawan Palace",
+        category: "Art Deco Royal Palace",
+        city: "Jodhpur, Rajasthan",
+        rating: "4.9",
+        reviews: "2,980+ Verified Reviews",
+        price: 6500000,
+        priceDisplay: "₹65,00,000 / Imperial Buyout",
+        capacity: "Capacity: 1,500 Guests | 70 Art Deco Palace Rooms",
+        phone: "+91 291 251 0101",
+        mapsUrl: "https://maps.google.com/?q=Umaid+Bhawan+Palace+Jodhpur",
+        mainImg: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Perched high above the blue city of Jodhpur, this sandstone monument is one of the world's largest private residences, offering celebrity-style opulent royal weddings.",
+        amenities: ["Baradari Lawns for 1500 Guests", "Historic Marwar Museum", "Subterranean Zodiac Pool", "Helipad & Private Airstrip", "Vintage Car Fleet"]
+      },
+      {
+        id: "falaknuma",
+        title: "Taj Falaknuma Palace",
+        category: "Nizam Royal Palace",
+        city: "Hyderabad, Telangana",
+        rating: "4.7",
+        reviews: "3,110+ Verified Reviews",
+        price: 4200000,
+        priceDisplay: "₹42,00,000 / 2-Day Extravaganza",
+        capacity: "Capacity: 600 Guests | 60 Nizam Suites",
+        phone: "+91 40 6629 8585",
+        mapsUrl: "https://maps.google.com/?q=Taj+Falaknuma+Palace+Hyderabad",
+        mainImg: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "The 'Mirror of the Sky' palace elevated 2,000 feet above Hyderabad features horse-drawn carriage entries, Venetian chandeliers, and the world-famous 101-seat dining table.",
+        amenities: ["Horse-drawn Royal Carriage Entry", "101 Dining Hall Feast", "Corinthian Pillar Courtyards", "Gol Bungalow Sunset Sangeet"]
+      },
+      {
+        id: "tajexotica",
+        title: "Taj Exotica Resort & Spa",
+        category: "Luxury Beach Resort",
+        city: "Benaulim, South Goa",
+        rating: "4.7",
+        reviews: "3,650+ Verified Reviews",
+        price: 3800000,
+        priceDisplay: "₹38,00,000 / Sunset Beach Wedding",
+        capacity: "Capacity: 1,000 Guests | 140 Sea-Facing Villas",
+        phone: "+91 832 668 3333",
+        mapsUrl: "https://maps.google.com/?q=Taj+Exotica+Resort+Goa",
+        mainImg: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Spread across 56 acres of lush gardens along the Arabian Sea coast. Pristine white sands, tropical palm groves, and sunset beach-side mandaps for coastal luxury weddings.",
+        amenities: ["Beachfront Sunset Mandap", "56-Acre Coconut Palm Lawns", "Portuguese Villa Suites", "Live Seafood & Multi-Cuisine Feast"]
+      }
+    ];
+
+    /* Hotels dataset */
+    const hotelPlaces = [
+      {
+        id: "leeladelhi",
+        title: "The Leela Palace New Delhi",
+        category: "Imperial Capital Hotel",
+        city: "Chanakyapuri, New Delhi",
+        rating: "4.8",
+        reviews: "2,840+ Verified Reviews",
+        price: 2800000,
+        capacity: "Capacity: 800 Guests | 254 Grand Heritage Rooms",
+        phone: "+91 11 3933 1234",
+        manager: "Front Desk & Weddings Director",
+        mapsUrl: "https://maps.google.com/?q=The+Leela+Palace+New+Delhi",
+        mainImg: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Architectural tribute to Lutyens' Delhi. The Leela Palace offers grand ballroom chandeliers, rooftop infinity pools, and royal banquet suites for high-society weddings.",
+        amenities: ["Grand Ballroom (No Pillars)", "Rolls-Royce Chauffeur Transfer", "Fine-Dining Le Cirque & Jamavar", "Dedicated Wedding Concierge"]
+      },
+      {
+        id: "itcgrandbharat",
+        title: "ITC Grand Bharat Luxury Retreat",
+        category: "300-Acre Heritage Retreat",
+        city: "Gurugram, NCR",
+        rating: "4.8",
+        reviews: "3,210+ Verified Reviews",
+        price: 3200000,
+        capacity: "Capacity: 1,000 Guests | 104 Presidential Villas",
+        phone: "+91 1267 285 500",
+        manager: "Senior Event Reservations Desk",
+        mapsUrl: "https://maps.google.com/?q=ITC+Grand+Bharat+Gurugram",
+        mainImg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Surrounded by the ancient Aravalli Range, this 300-acre retreat offers private semi-private pool villas, golf course lawns, and traditional royal stepped wells.",
+        amenities: ["Mandap at Aravalli Amphitheatre", "100+ Luxury Suites with Private Plunge Pools", "Kaya Kalp Royal Spa", "Helipad Access"]
+      },
+      {
+        id: "tajfatehprakash",
+        title: "Taj Fateh Prakash Palace",
+        category: "City Palace Complex",
+        city: "City Palace Complex, Udaipur",
+        rating: "4.7",
+        reviews: "2,670+ Verified Reviews",
+        price: 3600000,
+        capacity: "Capacity: 650 Guests | 65 Palace Suites",
+        phone: "+91 294 252 8008",
+        manager: "Royal Banquet Sales Manager",
+        mapsUrl: "https://maps.google.com/?q=Taj+Fateh+Prakash+Palace+Udaipur",
+        mainImg: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Located within the historic City Palace complex overlooking Lake Pichola, featuring the famous Durbar Hall with rare crystal collections and original portraits of Mewar royalty.",
+        amenities: ["Historic Durbar Hall Ceremonies", "Sunset Terrace Cocktails", "Direct City Palace Gate Access", "Private Boat Jetty"]
+      },
+      {
+        id: "grandheritage",
+        title: "Grand Heritage Palace Jaipur",
+        category: "Rajputana Courtyard Banquet",
+        city: "Civil Lines, Jaipur",
+        rating: "4.9",
+        reviews: "1,940+ Verified Reviews",
+        price: 2400000,
+        capacity: "Capacity: 900 Guests | 120 Deluxe Rooms",
+        phone: "+91 141 236 8899",
+        manager: "Hospitality Desk Supervisor",
+        mapsUrl: "https://maps.google.com/?q=Grand+Heritage+Jaipur",
+        mainImg: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+        gallery: [
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=400&q=80",
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80"
+        ],
+        description: "Classic Rajasthani haveli styled hotel with multi-tiered carved arches, open central courtyards for Haldi and Mehndi ceremonies, and grand air-conditioned banquet halls.",
+        amenities: ["Central Jharokha Mandap Lawn", "Pure Vegetarian Banquet Kitchens", "Ample Guest Parking", "Live Shehnai Players Welcome"]
+      }
+    ];
+
+    /* Checklist Dataset */
+    let checklistItems = [
+      { id: 1, text: "Finalize Royal Venue & Block Guest Rooms", done: true },
+      { id: 2, text: "Curate Shahi Catering & Book Tasting Session", done: true },
+      { id: 3, text: "Customize & Export Digital Wedding E-Card", done: true },
+      { id: 4, text: "Confirm 4K Drone Cinematographer & Makeup Artist", done: true },
+      { id: 5, text: "Book Vedic Pandit Ji & Muhurat Samagri", done: false },
+      { id: 6, text: "Confirm Sangeet Bollywood DJ & Punjabi Dhol Troupe", done: false }
+    ];
+
+    /* RSVP Dataset */
+    let rsvpList = [
+      { id: 1, name: "Rajesh & Sunita Sharma", diet: "Pure Veg", status: "Confirmed" },
+      { id: 2, name: "Vikram Rathore Family", diet: "Jain Meal", status: "Confirmed" },
+      { id: 3, name: "Kunal Mehra", diet: "Multi-Cuisine", status: "Pending" }
+    ];
+
+    /* State variables */
     let currentTheme = cardThemes[0];
     let cartItems = [];
     let showVenueQr = false;
     let currentCategory = 'all';
+    let confirmedBookings = JSON.parse(localStorage.getItem('vivaah_bookings') || '[]');
+    let activeBookingMeta = {};
 
-    const destinationPlaces = [
-      {
-        id: 'dest-1',
-        title: "The Oberoi Udaivilas",
-        category: "Royal Destination Palace",
-        city: "Lake Pichola, Udaipur, Rajasthan",
-        rating: 4.8,
-        reviewsCount: "3,820+ Reviews",
-        price: 4800000,
-        priceDisplay: "₹48,00,000 / 3-Day Wedding Package",
-        capacity: "1,000 Guests | 90 Heritage Suites",
-        phone: "+91 294 243 3300",
-        mapsUrl: "https://maps.google.com/?q=The+Oberoi+Udaivilas+Udaipur",
-        mainImg: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Ranked among the world's best royal hotels with sprawling domes, serene courtyards, reflection pools, and Shikara boat arrivals across Lake Pichola for grand wedding mandaps.",
-        amenities: ["Lakeside Mandap Lawn", "Boat Grand Baraat", "Royal Spa Suites", "Helipad Access", "Mewari Feast Counters", "24/7 Butler Service"]
-      },
-      {
-        id: 'dest-2',
-        title: "Taj Lake Palace",
-        category: "Island Palace Heritage",
-        city: "Pichola Island, Udaipur, Rajasthan",
-        rating: 4.8,
-        reviewsCount: "4,150+ Reviews",
-        price: 5200000,
-        priceDisplay: "₹52,00,000 / Complete Island Takeover",
-        capacity: "650 Guests | 83 Royal Suites",
-        phone: "+91 294 242 8800",
-        mapsUrl: "https://maps.google.com/?q=Taj+Lake+Palace+Udaipur",
-        mainImg: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "A 275-year-old floating white marble palace nestled in the middle of Lake Pichola. Breathtaking Jagmandir island views, vintage Rajput courtesies, and timeless candlelit courtyard celebrations.",
-        amenities: ["Private Island Access", "Sunset Sangeet Terrace", "J Wellness Circle Spa", "Royal Shikara Fleet", "Floating Varmala Stage"]
-      },
-      {
-        id: 'dest-3',
-        title: "Rambagh Palace",
-        category: "Imperial Maharaja Palace",
-        city: "Bhawani Singh Road, Jaipur, Rajasthan",
-        rating: 4.7,
-        reviewsCount: "3,400+ Reviews",
-        price: 4200000,
-        priceDisplay: "₹42,00,000 / Full Event Grounds",
-        capacity: "1,500 Guests | 78 Palace Suites",
-        phone: "+91 141 667 1234",
-        mapsUrl: "https://maps.google.com/?q=Rambagh+Palace+Jaipur",
-        mainImg: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Former royal residence of the Maharaja of Jaipur. Features manicured 47-acre Mughal gardens, antique crystal chandeliers, ornate marble jalis, and elephant procession pathways for the Baraat.",
-        amenities: ["47-Acre Royal Gardens", "Elephant & Buggy Baraat", "Suvarna Mahal Banqueting", "Polo Grounds", "Heritage Suites"]
-      },
-      {
-        id: 'dest-4',
-        title: "Umaid Bhawan Palace",
-        category: "Golden Sandstone Fort Palace",
-        city: "Cantt Area, Jodhpur, Rajasthan",
-        rating: 4.5,
-        reviewsCount: "2,980+ Reviews",
-        price: 5500000,
-        priceDisplay: "₹55,00,000 / Royal Celebration",
-        capacity: "1,800 Guests | 70 Art Deco Rooms",
-        phone: "+91 291 251 0101",
-        mapsUrl: "https://maps.google.com/?q=Umaid+Bhawan+Palace+Jodhpur",
-        mainImg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "One of the world's largest private royal residences, constructed of golden Chittar sandstone. Host grand weddings against the towering 105-foot cupola and sprawling Baradari lawns.",
-        amenities: ["Towering 105ft Dome Hall", "Marwar Heritage Cuisine", "Subterranean Zodiac Pool", "Vintage Car Fleet", "Royal Bagpiper Troupe"]
-      },
-      {
-        id: 'dest-5',
-        title: "Taj Falaknuma Palace",
-        category: "Nawabi Cloud Palace",
-        city: "Engine Bowli, Falaknuma, Hyderabad",
-        rating: 4.7,
-        reviewsCount: "3,110+ Reviews",
-        price: 4900000,
-        priceDisplay: "₹49,00,000 / Royal Nawabi Spread",
-        capacity: "900 Guests | 60 Nizam Suites",
-        phone: "+91 40 6629 8585",
-        mapsUrl: "https://maps.google.com/?q=Taj+Falaknuma+Palace+Hyderabad",
-        mainImg: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Perched 2,000 feet above Hyderabad, this Italian marble palace was once home to the Nizam. Features a 101-seat dining table, Jade room collections, and horse-drawn carriage entries.",
-        amenities: ["Horse-Drawn Chariot Entry", "World's Longest Dining Table", "Gol Bungalow Terrace", "Qawwali Sangeet Courtyard"]
-      },
-      {
-        id: 'dest-6',
-        title: "Taj Exotica Resort & Spa",
-        category: "Luxury Beachfront Sanctuary",
-        city: "Benaulim Beach, South Goa",
-        rating: 4.7,
-        reviewsCount: "3,650+ Reviews",
-        price: 3600000,
-        priceDisplay: "₹36,00,000 / Beachfront Wedding",
-        capacity: "1,200 Guests | 140 Sea-View Villas",
-        phone: "+91 832 668 3333",
-        mapsUrl: "https://maps.google.com/?q=Taj+Exotica+Resort+Goa",
-        mainImg: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Sprawling across 56 acres of Mediterranean-style landscaped gardens along the white sands of Benaulim Beach. Perfect for sunset sundowners, breezy mandaps, and beach cocktail parties.",
-        amenities: ["Private Beach Mandap Lawn", "Sunset Cocktail Gazebo", "9-Hole Executive Golf", "Seafood & Grill Stations", "Luxury Villas"]
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+      const activeSec = document.getElementById('sec-' + tabId);
+      if (activeSec) {
+        activeSec.classList.remove('hidden');
+        activeSec.classList.add('block');
       }
-    ];
 
-    const hotelPlaces = [
-      {
-        id: 'hotel-1',
-        title: "The Leela Palace New Delhi",
-        category: "5-Star Ultra Luxury",
-        city: "Diplomatic Enclave, Chanakyapuri, New Delhi",
-        rating: 4.6,
-        reviewsCount: "5,120+ Reviews",
-        price: 750000,
-        priceDisplay: "₹7,50,000 / 50 Luxury Rooms Block",
-        capacity: "1,200 Guests Banquet | 254 Grand Rooms",
-        phone: "+91 11 3933 1234",
-        manager: "Rajiv Khurana (VP Banquets)",
-        mapsUrl: "https://maps.google.com/?q=The+Leela+Palace+New+Delhi",
-        mainImg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Iconic Lutyens architectural grandeur in Diplomatic Enclave. Features a grand pillarless ballroom of 11,000 sq ft, rooftop infinity pool with city vistas, and world-class culinary curation.",
-        amenities: ["Grand Pillarless Ballroom", "Rooftop Glass Terrace", "Valet Parking for 500 Cars", "Bridal Luxury Suite", "Michelin-Standard Menus"]
-      },
-      {
-        id: 'hotel-2',
-        title: "ITC Grand Bharat, Luxury Retreat",
-        category: "LEED Platinum All-Suite Resort",
-        city: "Hasanpur Tauru, Gurugram / Delhi NCR",
-        rating: 4.8,
-        reviewsCount: "3,890+ Reviews",
-        price: 880000,
-        priceDisplay: "₹8,80,000 / 60 Villa Suite Block",
-        capacity: "1,500 Guests | 104 Presidential Villas",
-        phone: "+91 1267 285 500",
-        manager: "Devika Sharma (Banquets Lead)",
-        mapsUrl: "https://maps.google.com/?q=ITC+Grand+Bharat+Gurugram",
-        mainImg: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Set amid 300 acres of pristine Aravalli greenery. 100 deluxe suites and 4 presidential villas with private plunge pools, sprawling lawns, and an amphitheater for Sangeet nights.",
-        amenities: ["300-Acre Aravalli Estate", "27-Hole Signature Golf", "Private Plunge Pool Villas", "Pillarless Banquets", "Organic Farm Feasts"]
-      },
-      {
-        id: 'hotel-3',
-        title: "Taj Fateh Prakash Palace",
-        category: "City Palace Heritage Hotel",
-        city: "City Palace Complex, Pichola, Udaipur",
-        rating: 4.6,
-        reviewsCount: "2,740+ Reviews",
-        price: 640000,
-        priceDisplay: "₹6,40,000 / 40 Royal Suites Block",
-        capacity: "800 Guests | 65 Heritage Suites",
-        phone: "+91 294 262 8800",
-        manager: "Digvijay Shekhawat (General Manager)",
-        mapsUrl: "https://maps.google.com/?q=Taj+Fateh+Prakash+Palace+Udaipur",
-        mainImg: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Located right inside Udaipur's historic City Palace on Lake Pichola. Features the famous Durbar Hall Sabhagaar, priceless miniature paintings, and sweeping views of the Jagmandir island.",
-        amenities: ["Historic Durbar Hall", "Sunset Lake Pichola Terrace", "Royal Museum Access", "Mewari Feast Service", "Private Palace Gate"]
-      },
-      {
-        id: 'hotel-4',
-        title: "Grand Heritage Palace & Spa",
-        category: "Boutique Heritage Resort",
-        city: "Civil Lines, Jaipur, Rajasthan",
-        rating: 4.9,
-        reviewsCount: "3,250+ Reviews",
-        price: 550000,
-        priceDisplay: "₹5,50,000 / 50 Deluxe Rooms Block",
-        capacity: "1,500 Guests | 120 Luxury Rooms",
-        phone: "+91 98290 11442",
-        manager: "Vikram Singh Rathore (Reservations Lead)",
-        mapsUrl: "https://maps.google.com/?q=Civil+Lines+Jaipur",
-        mainImg: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-        gallery: [
-          "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80",
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80"
-        ],
-        description: "Rajputana architecture with modern luxury. Two central grand banquet halls, poolside Mehendi lawns, and dedicated wedding hospitality desks for guest check-ins.",
-        amenities: ["2 Central Banquet Halls", "Poolside Mehendi Lawn", "Hospitality Desk", "Live Rajasthani Folk Stage", "Valet Parking"]
+      document.querySelectorAll('.tab-nav-btn').forEach(b => {
+        b.classList.remove('bg-royal-crimson', 'text-white', 'shadow');
+        b.classList.add('text-stone-700');
+      });
+      const activeNavBtn = document.getElementById('tab-btn-' + tabId);
+      if (activeNavBtn) {
+        activeNavBtn.classList.remove('text-stone-700');
+        activeNavBtn.classList.add('bg-royal-crimson', 'text-white', 'shadow');
       }
-    ];
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function showToast(msg, icon = '✨') {
+      const toast = document.getElementById('toastBox');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.innerText = msg;
+      if (toastIcon) toastIcon.innerText = icon;
+
+      toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-x-32');
+      toast.classList.add('opacity-100', 'translate-x-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-x-0');
+        toast.classList.add('opacity-0', 'pointer-events-none', 'translate-x-32');
+      }, 3200);
+    }
+
+    function saveBookingsToStorage() {
+      localStorage.setItem('vivaah_bookings', JSON.stringify(confirmedBookings));
+      updateBookingsBadge();
+    }
+
+    function updateBookingsBadge() {
+      const badge = document.getElementById('navBookingsBadge');
+      if (!badge) return;
+      if (confirmedBookings.length > 0) {
+        badge.innerText = confirmedBookings.length;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    function renderCardsGallery(themesToRender) {
+      const grid = document.getElementById('cardsGalleryGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      themesToRender.forEach(t => {
+        const isSelected = currentTheme.id === t.id;
+        const btn = document.createElement('button');
+        btn.onclick = () => selectCardTheme(t.id);
+        btn.className = `p-3 rounded-2xl border text-center transition-all flex flex-col items-center justify-between h-28 relative ${t.bg} ${t.text} ${isSelected ? 'ring-4 ring-royal-gold ring-offset-2 scale-105 shadow-xl border-white' : 'border-stone-300 hover:scale-102 shadow-sm'}`;
+        btn.innerHTML = `
+          <div class="text-[9px] uppercase tracking-wider font-bold opacity-80">Theme #${t.id}</div>
+          <div class="font-cinzel font-bold text-xs leading-tight">${t.name}</div>
+          <span class="text-[9px] opacity-75 capitalize">${t.cat}</span>
+          ${isSelected ? '<span class="absolute top-1.5 right-1.5 w-4 h-4 bg-royal-gold text-royal-950 rounded-full text-[9px] flex items-center justify-center font-bold">✓</span>' : ''}
+        `;
+        grid.appendChild(btn);
+      });
+    }
+
+    function selectCardTheme(id) {
+      currentTheme = cardThemes.find(t => t.id === id) || cardThemes[0];
+      const activeLabel = document.getElementById('activeThemeLabel');
+      if (activeLabel) activeLabel.innerText = `#${currentTheme.id} ${currentTheme.name}`;
+
+      const card = document.getElementById('live-card-container');
+      if (card) {
+        cardThemes.forEach(t => {
+          card.classList.remove(...t.bg.split(' '), ...t.text.split(' '), ...t.border.split(' '));
+        });
+        card.classList.add(...currentTheme.bg.split(' '), ...currentTheme.text.split(' '), ...currentTheme.border.split(' '));
+      }
+
+      if (currentCategory === 'all') {
+        renderCardsGallery(cardThemes);
+      } else {
+        renderCardsGallery(cardThemes.filter(c => c.cat === currentCategory));
+      }
+
+      showToast(`Selected Theme: #${currentTheme.id} ${currentTheme.name}`, "🎨");
+    }
+
+    function filterCards(category) {
+      currentCategory = category;
+      document.querySelectorAll('.card-filter-btn').forEach(b => {
+        b.classList.remove('bg-royal-crimson', 'text-white');
+        b.classList.add('bg-white', 'text-stone-700');
+      });
+      if (window.event && window.event.target) {
+        window.event.target.classList.remove('bg-white', 'text-stone-700');
+        window.event.target.classList.add('bg-royal-crimson', 'text-white');
+      }
+
+      if (category === 'all') {
+        renderCardsGallery(cardThemes);
+      } else {
+        renderCardsGallery(cardThemes.filter(c => c.cat === category));
+      }
+    }
+
+    function refreshCardPreview() {
+      const groom = document.getElementById('inpGroom')?.value || 'Aarav';
+      const bride = document.getElementById('inpBride')?.value || 'Ananya';
+      const date = document.getElementById('inpDate')?.value || '14th December 2026';
+      const venue = document.getElementById('inpVenue')?.value || 'The Oberoi Udaivilas, Udaipur';
+      const host = document.getElementById('inpHost')?.value || '';
+      const motif = document.getElementById('inpMotif')?.value || '🕉️';
+
+      const dispGroom = document.getElementById('dispGroomName');
+      const dispBride = document.getElementById('dispBrideName');
+      const dispDate = document.getElementById('dispDate');
+      const dispVenue = document.getElementById('dispVenue');
+      const dispHost = document.getElementById('dispHostLine');
+      const dispMotif = document.getElementById('dispMotif');
+
+      if (dispGroom) dispGroom.innerText = groom;
+      if (dispBride) dispBride.innerText = bride;
+      if (dispDate) dispDate.innerText = date;
+      if (dispVenue) dispVenue.innerText = venue;
+      if (dispHost) dispHost.innerText = host;
+      if (dispMotif) dispMotif.innerText = motif;
+    }
+
+    function handleCouplePhotoUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.getElementById('dispCouplePhotoImg');
+          const wrapper = document.getElementById('dispCouplePhotoWrapper');
+          if (img && wrapper) {
+            img.src = e.target.result;
+            wrapper.classList.remove('hidden');
+          }
+        };
+        reader.readAsDataURL(input.files[0]);
+        showToast("Couple photo uploaded to card preview!", "📸");
+      }
+    }
+
+    function toggleCardVenueQr() {
+      showVenueQr = !showVenueQr;
+      const qrWrapper = document.getElementById('dispCardVenueQr');
+      const qrBtnText = document.getElementById('btnToggleQrText');
+      if (qrWrapper) {
+        if (showVenueQr) {
+          qrWrapper.classList.remove('hidden');
+          if (qrBtnText) qrBtnText.innerText = "Hide QR Code";
+          showToast("Venue Location QR enabled on card!", "📍");
+        } else {
+          qrWrapper.classList.add('hidden');
+          if (qrBtnText) qrBtnText.innerText = "Show QR Code";
+          showToast("Venue Location QR hidden", "📍");
+        }
+      }
+    }
+
+    function downloadCardImage() {
+      const el = document.getElementById('live-card-container');
+      if (!el || typeof html2canvas === 'undefined') {
+        window.print();
+        return;
+      }
+      showToast("Generating high-res card image...", "🖼️");
+      html2canvas(el, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+        const a = document.createElement('a');
+        const groom = document.getElementById('inpGroom')?.value || 'Aarav';
+        const bride = document.getElementById('inpBride')?.value || 'Ananya';
+        a.download = `Vivaah_Card_${groom}_weds_${bride}.png`;
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        showToast("Wedding card saved as image!", "✅");
+      }).catch(() => {
+        window.print();
+      });
+    }
+
+    function generateAiCardShloka() {
+      const groom = document.getElementById('inpGroom')?.value || 'Aarav';
+      const bride = document.getElementById('inpBride')?.value || 'Ananya';
+      const hostEl = document.getElementById('inpHost');
+      
+      const shlokas = [
+        `मंगलम् भगवान विष्णुः मंगलम् गरुड़ध्वजः। ${groom} एवं ${bride} के शुभ परिणय में सपरिवार सादर आमंत्रित हैं।`,
+        `वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥ ${groom} Weds ${bride}`,
+        `दो दिलों का मिलन, सात फेरों का बंधन। ${groom} और ${bride} के शुभ विवाह में आपका आशीर्वाद सादर प्रार्थनीय है।`,
+        `स्नेह, समर्पण और सात जन्मों का वादा। ${groom} संग ${bride} के पावन परिणय में हार्दिक स्वागत है।`
+      ];
+
+      const selected = shlokas[Math.floor(Math.random() * shlokas.length)];
+      if (hostEl) {
+        hostEl.value = selected;
+        refreshCardPreview();
+      }
+      showToast("Auspicious AI Shloka card me add ho gaya!", "📜");
+    }
+
+    function generateAiCardAudioVoiceover() {
+      const groom = document.getElementById('inpGroom')?.value || 'Aarav';
+      const bride = document.getElementById('inpBride')?.value || 'Ananya';
+      const date = document.getElementById('inpDate')?.value || '14th December 2026';
+      const venue = document.getElementById('inpVenue')?.value || 'The Oberoi Udaivilas, Udaipur';
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance(`Shubh Vivah! You are cordially invited to celebrate the royal wedding of ${groom} and ${bride} on ${date} at ${venue}. We look forward to your gracious presence and blessings!`);
+        speech.rate = 0.95;
+        speech.pitch = 1.05;
+        window.speechSynthesis.speak(speech);
+        showToast("Playing royal wedding audio announcement!", "🎙️");
+      } else {
+        showToast("Audio invitation synthesized!", "🎙️");
+      }
+    }
+
+    function updateCateringCalculation() {
+      const slider = document.getElementById('guestSlider');
+      const guests = slider ? parseInt(slider.value, 10) : 350;
+      const label = document.getElementById('guestCountLabel');
+      if (label) label.innerText = guests;
+
+      const selectedPlate = cartItems.find(i => i.type === 'plate');
+      const platePrice = selectedPlate ? selectedPlate.price : 1200;
+      const total = platePrice * guests;
+
+      const totalLabel = document.getElementById('totalCateringCostLabel');
+      if (totalLabel) totalLabel.innerText = '₹' + total.toLocaleString('en-IN');
+      updateCartDisplay();
+    }
+
+    function updateBudgetBreakdown() {
+      const slider = document.getElementById('budgetSlider');
+      const val = slider ? parseInt(slider.value, 10) : 2500000;
+      const disp = document.getElementById('targetBudgetDisplay');
+      if (disp) disp.innerText = '₹' + val.toLocaleString('en-IN');
+
+      const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+      const setEl = (id, n) => {
+        const el = document.getElementById(id);
+        if (el) el.innerText = fmt(n);
+      };
+
+      setEl('bgtCatering', val * 0.35);
+      setEl('bgtVenue', val * 0.25);
+      setEl('bgtDecor', val * 0.15);
+      setEl('bgtPhoto', val * 0.10);
+      setEl('bgtDj', val * 0.08);
+      setEl('bgtCards', val * 0.07);
+    }
 
     function renderDestinationCards() {
       const container = document.getElementById('destinationVenuesGrid');
@@ -1287,12 +1690,17 @@
               <div class="text-lg font-bold text-royal-gold mb-3">${p.priceDisplay}</div>
             </div>
             <div class="space-y-2">
-              <button onclick="openPlaceDetailModal('${p.id}', 'destination')" class="w-full bg-royal-cream hover:bg-amber-100/70 text-royal-900 border border-royal-gold/50 py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5">
-                <i class="fas fa-eye"></i> View Details, Photos & Rating
+              <button onclick="openDirectBooking('${p.title}', ${p.price}, 'destination')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+                <i class="fas fa-calendar-check"></i> Book Palace Directly
               </button>
-              <button onclick="addToPlan('${p.title} Package', ${p.price}, 'fixed')" class="w-full bg-royal-crimson text-white py-2.5 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
-                Select Venue Package
-              </button>
+              <div class="flex gap-2">
+                <button onclick="openPlaceDetailModal('${p.id}', 'destination')" class="flex-1 bg-royal-cream hover:bg-amber-100/70 text-royal-900 border border-royal-gold/50 py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1">
+                  <i class="fas fa-eye"></i> Details
+                </button>
+                <button onclick="addToPlan('${p.title} Package', ${p.price}, 'fixed', this)" class="flex-1 bg-royal-crimson text-white py-2 rounded-xl font-bold text-xs uppercase hover:bg-royal-900 transition shadow">
+                  + Add to Plan
+                </button>
+              </div>
             </div>
           </div>
         `;
@@ -1341,15 +1749,15 @@
             </div>
 
             <div class="space-y-2">
-              <button onclick="openPlaceDetailModal('${h.id}', 'hotel')" class="w-full bg-royal-cream hover:bg-amber-100/70 text-royal-900 border border-royal-gold/50 py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1.5">
-                <i class="fas fa-eye"></i> View Details, Photos & Rating
+              <button onclick="openDirectBooking('${h.title}', ${h.price}, 'hotel')" class="w-full bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 py-2.5 rounded-xl font-bold text-xs uppercase shadow transition flex items-center justify-center gap-1.5">
+                <i class="fas fa-calendar-check"></i> Book Rooms Block Directly
               </button>
               <div class="flex gap-2">
                 <a href="tel:${h.phone}" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 rounded-xl text-center text-xs flex items-center justify-center gap-1 shadow">
                   <i class="fas fa-phone-alt"></i> Call Desk
                 </a>
-                <button onclick="addToPlan('${h.title} Block', ${h.price}, 'fixed')" class="flex-1 bg-royal-crimson hover:bg-royal-900 text-white font-bold py-2 rounded-xl text-xs shadow">
-                  Book Rooms
+                <button onclick="openPlaceDetailModal('${h.id}', 'hotel')" class="flex-1 bg-royal-cream hover:bg-amber-100/70 text-royal-900 border border-royal-gold/50 py-2 rounded-xl font-bold text-xs transition flex items-center justify-center gap-1">
+                  <i class="fas fa-eye"></i> Details
                 </button>
               </div>
             </div>
@@ -1359,49 +1767,61 @@
       });
     }
 
-    function openPlaceDetailModal(id, type) {
-      const dataList = type === 'destination' ? destinationPlaces : hotelPlaces;
-      const place = dataList.find(p => p.id === id);
+    function openPlaceDetailModal(placeId, type) {
+      const list = type === 'destination' ? destinationPlaces : hotelPlaces;
+      const place = list.find(p => p.id === placeId);
       if (!place) return;
 
       const modal = document.getElementById('venueDetailModal');
+      if (!modal) return;
+
       document.getElementById('modalVenueImg').src = place.mainImg;
       document.getElementById('modalVenueTitle').innerText = place.title;
-      document.getElementById('modalVenueCategory').innerText = place.category;
+      document.getElementById('modalVenueLocation').innerHTML = `<i class="fas fa-map-marker-alt text-royal-gold mr-1"></i> ${place.city}`;
       document.getElementById('modalVenueRating').innerText = place.rating;
-      document.getElementById('modalVenueReviews').innerText = `(${place.reviewsCount})`;
-      document.getElementById('modalVenueLocation').innerHTML = `<i class="fas fa-map-marker-alt text-royal-gold"></i> <span>${place.city}</span>`;
+      document.getElementById('modalVenueReviews').innerText = place.reviews;
+      document.getElementById('modalVenueCategory').innerText = place.category;
       document.getElementById('modalVenueDesc').innerText = place.description;
-      document.getElementById('modalVenuePrice').innerText = `₹${place.price.toLocaleString('en-IN')}`;
-      document.getElementById('modalVenueCapacity').innerText = `Capacity: ${place.capacity}`;
-      document.getElementById('modalVenuePhoneLink').href = `tel:${place.phone}`;
-      document.getElementById('modalVenueMapsLink').href = place.mapsUrl;
+      document.getElementById('modalVenuePrice').innerText = '₹' + place.price.toLocaleString('en-IN');
+      document.getElementById('modalVenueCapacity').innerText = place.capacity;
 
-      const thumbContainer = document.getElementById('modalGalleryThumbnails');
-      thumbContainer.innerHTML = '';
-      (place.gallery || []).forEach(imgUrl => {
-        const img = document.createElement('img');
-        img.src = imgUrl;
-        img.alt = place.title;
-        img.className = "w-full h-20 object-cover rounded-xl border border-stone-200 cursor-pointer hover:opacity-80 transition";
-        img.onclick = () => { document.getElementById('modalVenueImg').src = imgUrl; };
-        thumbContainer.appendChild(img);
-      });
+      const phoneLink = document.getElementById('modalVenuePhoneLink');
+      if (phoneLink) phoneLink.href = `tel:${place.phone.replace(/[^0-9+]/g, '')}`;
+
+      const mapsLink = document.getElementById('modalVenueMapsLink');
+      if (mapsLink) mapsLink.href = place.mapsUrl;
+
+      const galleryContainer = document.getElementById('modalGalleryThumbnails');
+      if (galleryContainer) {
+        galleryContainer.innerHTML = '';
+        place.gallery.forEach(imgUrl => {
+          const thumb = document.createElement('img');
+          thumb.src = imgUrl;
+          thumb.className = "w-full h-20 object-cover rounded-xl border border-stone-200 cursor-pointer hover:opacity-90";
+          thumb.onclick = () => { document.getElementById('modalVenueImg').src = imgUrl; };
+          galleryContainer.appendChild(thumb);
+        });
+      }
 
       const amenitiesContainer = document.getElementById('modalVenueAmenities');
-      amenitiesContainer.innerHTML = '';
-      (place.amenities || []).forEach(am => {
-        const badge = document.createElement('span');
-        badge.className = "bg-stone-100 text-stone-800 text-[10px] font-semibold px-2.5 py-1 rounded-lg border border-stone-200";
-        badge.innerHTML = `✓ ${am}`;
-        amenitiesContainer.appendChild(badge);
-      });
+      if (amenitiesContainer) {
+        amenitiesContainer.innerHTML = '';
+        place.amenities.forEach(am => {
+          const span = document.createElement('span');
+          span.className = "bg-royal-cream text-stone-700 border border-royal-gold/40 px-2.5 py-1 rounded-full text-[10px] font-medium";
+          span.innerText = am;
+          amenitiesContainer.appendChild(span);
+        });
+      }
 
       const addBtn = document.getElementById('modalVenueAddBtn');
-      addBtn.onclick = () => {
-        addToPlan(`${place.title} Package`, place.price, 'fixed');
-        closeVenueDetailModal();
-      };
+      if (addBtn) {
+        addBtn.innerText = `Book ${place.title} Directly`;
+        addBtn.onclick = () => {
+          closeVenueDetailModal();
+          openDirectBooking(place.title, place.price, type === 'destination' ? 'destination' : 'hotel');
+        };
+      }
 
       modal.classList.remove('hidden');
     }
@@ -1410,130 +1830,436 @@
       document.getElementById('venueDetailModal')?.classList.add('hidden');
     }
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(sec => {
-        sec.classList.add('hidden');
-        sec.classList.remove('block');
-      });
+    function openDirectBooking(name, price, type) {
+      activeBookingMeta = { name, price, type };
 
-      const targetSec = document.getElementById(`sec-${tabId}`);
-      if (targetSec) {
-        targetSec.classList.remove('hidden');
-        targetSec.classList.add('block');
+      document.getElementById('bookItemName').value = name;
+      document.getElementById('bookItemPrice').value = price;
+      document.getElementById('bookItemType').value = type;
+
+      document.getElementById('bookSummaryName').innerText = name;
+      document.getElementById('bookingModalTitle').innerText = `Book ${name}`;
+
+      const advanceToken = Math.round(price * 0.20);
+      document.getElementById('bookSummaryMeta').innerText = `Total Estimate: ₹${price.toLocaleString('en-IN')}`;
+      document.getElementById('bookSummaryAdvance').innerText = `20% Advance Token: ₹${advanceToken.toLocaleString('en-IN')}`;
+
+      const dynamicContainer = document.getElementById('bookingDynamicFields');
+      if (!dynamicContainer) return;
+      dynamicContainer.innerHTML = '';
+
+      if (type === 'hotel') {
+        document.getElementById('bookingModalBadge').innerText = "🏨 Hotel & Banquet Booking";
+        dynamicContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Check-in Date *</label>
+              <input type="date" id="dynCheckIn" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Check-out Date *</label>
+              <input type="date" id="dynCheckOut" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Rooms Required</label>
+              <select id="dynRooms" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+                <option value="25 Rooms Block">25 Rooms (Small Family)</option>
+                <option value="50 Rooms Block" selected>50 Luxury Rooms (Standard Wedding)</option>
+                <option value="80+ Rooms Full Buyout">80+ Rooms (Complete Hotel Buyout)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Meal Plan</label>
+              <select id="dynMeal" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+                <option value="CP (Breakfast Included)">Breakfast Included (CP)</option>
+                <option value="MAP (Breakfast + Dinner)" selected>Breakfast + Dinner (MAP)</option>
+                <option value="All Meals Shahi Buffet">All 3 Meals Shahi Buffet</option>
+              </select>
+            </div>
+          </div>
+        `;
+      } else if (type === 'destination') {
+        document.getElementById('bookingModalBadge').innerText = "🏰 Fort & Palace Buyout";
+        dynamicContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Wedding Start Date *</label>
+              <input type="date" id="dynPalaceStart" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Celebration Duration</label>
+              <select id="dynPalaceDuration" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+                <option value="2 Days / 1 Night Grand Wedding">2 Days / 1 Night Celebration</option>
+                <option value="3 Days / 2 Nights Royal Wedding" selected>3 Days / 2 Nights Royal Wedding</option>
+                <option value="4 Days Heritage Extravaganza">4 Days Heritage Extravaganza</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Mandap Location Preference</label>
+            <select id="dynPalaceLawn" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+              <option value="Lakeside Sunset Courtyard">Lakeside Sunset Courtyard</option>
+              <option value="Historic Sheesh Mahal Hall">Historic Sheesh Mahal Hall</option>
+              <option value="Royal Garden Baradari Lawn">Royal Garden Baradari Lawn</option>
+            </select>
+          </div>
+        `;
+      } else if (type === 'dj') {
+        document.getElementById('bookingModalBadge').innerText = "🎧 DJ, Dhol & Entertainment";
+        dynamicContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Event Date *</label>
+              <input type="date" id="dynDjDate" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Occasion / Function</label>
+              <select id="dynDjOccasion" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+                <option value="Grand Sangeet Night" selected>Grand Sangeet Night</option>
+                <option value="Baraat Procession Only">Baraat Procession Only</option>
+                <option value="Cocktail & After Party">Cocktail & After Party</option>
+                <option value="Full Wedding Day Entertainment">Full Wedding Day Entertainment</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Stage & Visual Setup</label>
+            <select id="dynDjSetup" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+              <option value="Standard Audio + Moving Heads">Concert Sound + Moving Heads</option>
+              <option value="Curved 4K LED Wall + CO2 Pyro Jet" selected>Curved 4K LED Wall + CO2 Pyro Jets</option>
+              <option value="Arena Trussing + Cold Spark Special FX">Arena Trussing + Cold Spark Special FX</option>
+            </select>
+          </div>
+        `;
+      } else if (type === 'catering') {
+        const guests = parseInt(document.getElementById('guestSlider')?.value || "350", 10);
+        const total = price * guests;
+        document.getElementById('bookSummaryMeta').innerText = `Total for ${guests} Guests: ₹${total.toLocaleString('en-IN')}`;
+        document.getElementById('bookSummaryAdvance').innerText = `20% Advance: ₹${Math.round(total * 0.2).toLocaleString('en-IN')}`;
+
+        document.getElementById('bookingModalBadge').innerText = "🍽️ Shahi Feast Booking";
+        dynamicContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Feast Date *</label>
+              <input type="date" id="dynCatDate" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Guest Count</label>
+              <input type="number" id="dynCatGuests" value="${guests}" class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Serving Session</label>
+            <select id="dynCatSession" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+              <option value="Wedding Reception Dinner" selected>Wedding Reception Dinner (07:30 PM Onwards)</option>
+              <option value="Royal Lunch & Sangeet">Royal Lunch & Sangeet (12:30 PM Onwards)</option>
+              <option value="All Day Multi-Course">All Day Multi-Course Feasts</option>
+            </select>
+          </div>
+        `;
+      } else {
+        document.getElementById('bookingModalBadge').innerText = "📸 Wedding Vendor Booking";
+        dynamicContainer.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Booking Date *</label>
+              <input type="date" id="dynVendorDate" required class="w-full border border-stone-300 rounded-lg p-2 text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-stone-600 mb-0.5">Duration / Package</label>
+              <select id="dynVendorDuration" class="w-full border border-stone-300 rounded-lg p-2 text-xs bg-stone-50">
+                <option value="Full Wedding Day" selected>Full Wedding Day Coverage</option>
+                <option value="2-Day Sangeet + Wedding">2-Day Sangeet + Wedding</option>
+                <option value="3-Day Complete Rituals">3-Day Complete Rituals</option>
+              </select>
+            </div>
+          </div>
+        `;
       }
 
-      document.querySelectorAll('.tab-nav-btn').forEach(btn => {
-        btn.classList.remove('bg-royal-crimson', 'text-white', 'shadow');
-        btn.classList.add('text-stone-700');
-      });
+      // Default date to upcoming wedding date if available
+      const dateInputs = dynamicContainer.querySelectorAll('input[type="date"]');
+      const today = new Date();
+      const defaultDate = new Date(today.setDate(today.getDate() + 45)).toISOString().split('T')[0];
+      dateInputs.forEach(inp => { inp.value = defaultDate; });
 
-      const activeDesktopBtn = document.getElementById(`tab-btn-${tabId}`);
-      if (activeDesktopBtn) {
-        activeDesktopBtn.classList.remove('text-stone-700');
-        activeDesktopBtn.classList.add('bg-royal-crimson', 'text-white', 'shadow');
-      }
-
-      window.scrollTo({ top: 380, behavior: 'smooth' });
+      document.getElementById('directBookingModal')?.classList.remove('hidden');
     }
 
-    function refreshCardPreview() {
-      const getVal = (id, fallback) => {
-        const el = document.getElementById(id);
-        return el && el.value.trim() ? el.value.trim() : fallback;
-      };
-      const setTxt = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = val;
-      };
-
-      setTxt('dispCardMotif', getVal('inpMotif', '🕉️'));
-      setTxt('dispCardHost', getVal('inpHost', 'Sharma & Rathore Family Cordially Invites You'));
-      setTxt('dispCardGroom', getVal('inpGroom', 'Aarav Sharma'));
-      setTxt('dispCardBride', getVal('inpBride', 'Ananya Rathore'));
-      setTxt('dispCardDate', getVal('inpDate', 'Sunday, 14th December 2026'));
-      setTxt('dispCardTime', getVal('inpTime', '07:00 PM Onwards'));
-      setTxt('dispCardVenue', getVal('inpVenue', 'The Oberoi Udaivilas, Lake Pichola, Udaipur'));
-
-      const venue = getVal('inpVenue', 'The Oberoi Udaivilas Udaipur');
-      const qrImg = document.getElementById('dispCardQrImg');
-      if (qrImg) {
-        qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${encodeURIComponent('https://maps.google.com/?q=' + venue)}`;
-      }
+    function closeDirectBookingModal() {
+      document.getElementById('directBookingModal')?.classList.add('hidden');
     }
 
-    function handleCouplePhotoUpload(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = document.getElementById('dispCouplePhotoImg');
-          const wrapper = document.getElementById('dispCouplePhotoWrapper');
-          if (img && wrapper) {
-            img.src = e.target.result;
-            wrapper.classList.remove('hidden');
-          }
+    function handleDirectBookingSubmit(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('bookItemName').value;
+      const basePrice = parseInt(document.getElementById('bookItemPrice').value, 10);
+      const type = document.getElementById('bookItemType').value;
+      const clientName = document.getElementById('bookClientName').value.trim();
+      const clientPhone = document.getElementById('bookClientPhone').value.trim();
+      const clientCity = document.getElementById('bookClientCity').value.trim() || 'Udaipur';
+      const clientNotes = document.getElementById('bookClientNotes').value.trim() || 'Standard Royal Arrangement';
+
+      let bookingDate = 'December 2026';
+      let detailsMeta = '';
+      let calculatedTotal = basePrice;
+
+      if (type === 'hotel') {
+        const ci = document.getElementById('dynCheckIn')?.value || 'Check-in';
+        const co = document.getElementById('dynCheckOut')?.value || 'Check-out';
+        const rooms = document.getElementById('dynRooms')?.value || '50 Rooms Block';
+        bookingDate = `${ci} to ${co}`;
+        detailsMeta = `${rooms} | ${document.getElementById('dynMeal')?.value || ''}`;
+      } else if (type === 'destination') {
+        bookingDate = document.getElementById('dynPalaceStart')?.value || 'Destination Dates';
+        detailsMeta = `${document.getElementById('dynPalaceDuration')?.value || '3-Day Package'} | ${document.getElementById('dynPalaceLawn')?.value || 'Main Courtyard'}`;
+      } else if (type === 'dj') {
+        bookingDate = document.getElementById('dynDjDate')?.value || 'Sangeet Date';
+        detailsMeta = `${document.getElementById('dynDjOccasion')?.value || 'Sangeet'} | ${document.getElementById('dynDjSetup')?.value || 'Concert Audio'}`;
+      } else if (type === 'catering') {
+        bookingDate = document.getElementById('dynCatDate')?.value || 'Reception Date';
+        const guests = parseInt(document.getElementById('dynCatGuests')?.value || '350', 10);
+        calculatedTotal = basePrice * guests;
+        detailsMeta = `${guests} Guests | ${document.getElementById('dynCatSession')?.value || 'Dinner'}`;
+      } else {
+        bookingDate = document.getElementById('dynVendorDate')?.value || 'Event Date';
+        detailsMeta = `${document.getElementById('dynVendorDuration')?.value || 'Full Day'}`;
+      }
+
+      const bookingId = `VS-${Date.now().toString().slice(-6)}`;
+      const advanceToken = Math.round(calculatedTotal * 0.20);
+
+      const bookingRecord = {
+        id: bookingId,
+        service: name,
+        type: type,
+        clientName: clientName,
+        phone: clientPhone,
+        city: clientCity,
+        date: bookingDate,
+        meta: detailsMeta,
+        notes: clientNotes,
+        total: calculatedTotal,
+        advance: advanceToken,
+        timestamp: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+      };
+
+      confirmedBookings.unshift(bookingRecord);
+      saveBookingsToStorage();
+      closeDirectBookingModal();
+      showBookingSlip(bookingRecord);
+      showToast(`Booking ${bookingId} successfully confirmed!`, "👑");
+    }
+
+    function showBookingSlip(b) {
+      const slipContainer = document.getElementById('bookingSlipContent');
+      if (!slipContainer) return;
+
+      slipContainer.innerHTML = `
+        <div class="bg-royal-cream border border-royal-gold/40 rounded-2xl p-4 space-y-2">
+          <div class="flex items-center justify-between border-b border-royal-gold/30 pb-2">
+            <div>
+              <span class="text-[10px] text-stone-500 uppercase tracking-widest font-bold">Booking Reference ID</span>
+              <p class="font-cinzel font-black text-royal-crimson text-base">${b.id}</p>
+            </div>
+            <span class="bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider">
+              ✓ Date Locked
+            </span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs pt-1">
+            <div>
+              <span class="text-stone-500 text-[10px] block">Booked Property / Service:</span>
+              <b class="text-stone-900">${b.service}</b>
+            </div>
+            <div>
+              <span class="text-stone-500 text-[10px] block">Event Date(s):</span>
+              <b class="text-royal-crimson">${b.date}</b>
+            </div>
+            <div>
+              <span class="text-stone-500 text-[10px] block">Booked In The Name Of:</span>
+              <b class="text-stone-900">${b.clientName} (${b.phone})</b>
+            </div>
+            <div>
+              <span class="text-stone-500 text-[10px] block">Destination / City:</span>
+              <b class="text-stone-900">${b.city}</b>
+            </div>
+          </div>
+
+          <div class="border-t border-royal-gold/20 pt-2 text-xs">
+            <span class="text-stone-500 text-[10px] block">Configuration / Package:</span>
+            <p class="text-stone-800">${b.meta}</p>
+          </div>
+        </div>
+
+        <div class="bg-white border-2 border-dashed border-royal-gold/60 rounded-2xl p-4 flex items-center justify-between">
+          <div>
+            <p class="text-[10px] text-stone-500 font-bold uppercase">Estimated Contract Amount</p>
+            <p class="text-xl font-cinzel font-extrabold text-royal-crimson">₹${b.total.toLocaleString('en-IN')}</p>
+            <p class="text-[10px] text-emerald-700 font-bold mt-0.5">20% Token Locked: ₹${b.advance.toLocaleString('en-IN')}</p>
+          </div>
+          <div class="text-center">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent('https://vivaahsutra.com/verify/' + b.id)}" alt="QR Code" class="w-16 h-16 mx-auto rounded-lg border border-stone-200">
+            <span class="text-[8px] text-stone-500 uppercase font-mono block mt-1">Scan to Verify</span>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-stone-500 text-center leading-relaxed">
+          Vivaah Sutra Senior Concierge team has assigned this booking to the venue hospitality desk. You will receive an official PDF contract and dedicated manager allocation.
+        </p>
+      `;
+
+      const waBtn = document.getElementById('btnVoucherWhatsApp');
+      if (waBtn) {
+        waBtn.onclick = () => {
+          const msg = `✨ *VIVAAH SUTRA ROYAL BOOKING CONFIRMATION* ✨\n\n📌 *Booking ID:* ${b.id}\n👑 *Service/Venue:* ${b.service}\n📅 *Event Date:* ${b.date}\n👤 *Client:* ${b.clientName} (${b.phone})\n📍 *City:* ${b.city}\n⚙️ *Details:* ${b.meta}\n💰 *Total Amount:* ₹${b.total.toLocaleString('en-IN')}\n\nPlease proceed with official vendor agreement!`;
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
         };
-        reader.readAsDataURL(input.files[0]);
-        showToast("Couple photo uploaded to card preview!", "📸");
       }
+
+      document.getElementById('bookingConfirmationModal')?.classList.remove('hidden');
     }
 
-    function toggleCardVenueQr() {
-      showVenueQr = !showVenueQr;
-      const qrWrapper = document.getElementById('dispCardVenueQr');
-      const qrBtnText = document.getElementById('btnToggleQrText');
-      if (qrWrapper) {
-        if (showVenueQr) {
-          qrWrapper.classList.remove('hidden');
-          if (qrBtnText) qrBtnText.innerText = "Hide QR Code";
-          showToast("Venue Location QR enabled on card!", "📍");
-        } else {
-          qrWrapper.classList.add('hidden');
-          if (qrBtnText) qrBtnText.innerText = "Show QR Code";
-          showToast("Venue Location QR hidden", "📍");
+    function closeBookingConfirmationModal() {
+      document.getElementById('bookingConfirmationModal')?.classList.add('hidden');
+    }
+
+    function downloadBookingSlipImage() {
+      const el = document.getElementById('bookingSlipContent');
+      if (!el || typeof html2canvas === 'undefined') {
+        window.print();
+        return;
+      }
+      showToast("Generating Booking Slip image...", "🖼️");
+      html2canvas(el, { scale: 2, backgroundColor: '#fdfbf7' }).then(canvas => {
+        const a = document.createElement('a');
+        a.download = `Vivaah_Sutra_Slip_${Date.now()}.png`;
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        showToast("Booking Slip saved as image!", "✅");
+      }).catch(() => {
+        window.print();
+      });
+    }
+
+    function openMyBookingsModal() {
+      const container = document.getElementById('myBookingsListContainer');
+      const totalEl = document.getElementById('myBookingsTotalValue');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      if (confirmedBookings.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-stone-400">
+            <div class="text-4xl mb-2">📋</div>
+            <p class="font-bold text-sm text-stone-600">No active bookings yet</p>
+            <p class="text-xs text-stone-400 mt-1">Book any hotel, palace, DJ, or catering package directly to track them here!</p>
+          </div>
+        `;
+        if (totalEl) totalEl.innerText = '₹0';
+      } else {
+        let totalSum = 0;
+        confirmedBookings.forEach((b, index) => {
+          totalSum += b.total;
+          const card = document.createElement('div');
+          card.className = "bg-royal-cream border border-royal-gold/40 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs";
+          card.innerHTML = `
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-mono font-bold text-royal-crimson text-xs bg-white px-2 py-0.5 rounded border border-royal-gold/30">${b.id}</span>
+                <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Date Locked 🔒</span>
+                <span class="text-[10px] text-stone-400">${b.timestamp}</span>
+              </div>
+              <h5 class="font-cinzel font-bold text-stone-900 text-sm">${b.service}</h5>
+              <p class="text-[11px] text-stone-600 mt-0.5">📅 ${b.date} | 👤 ${b.clientName} | 📍 ${b.city}</p>
+              <p class="text-[10px] text-stone-500 mt-0.5 italic">${b.meta}</p>
+            </div>
+            <div class="flex flex-col sm:items-end justify-between gap-2 border-t sm:border-t-0 pt-2 sm:pt-0">
+              <div class="text-left sm:text-right">
+                <span class="text-[10px] text-stone-500 block">Total Contract:</span>
+                <b class="text-royal-crimson font-cinzel text-base">₹${b.total.toLocaleString('en-IN')}</b>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="showBookingSlip(confirmedBookings[${index}])" class="px-3 py-1 bg-royal-950 text-royal-gold-light rounded-lg font-bold text-[10px] hover:bg-royal-900">
+                  View Slip
+                </button>
+                <button onclick="cancelBooking(${index})" class="px-2 py-1 text-rose-600 hover:text-rose-800 rounded font-bold text-[10px]">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        if (totalEl) totalEl.innerText = '₹' + totalSum.toLocaleString('en-IN');
+      }
+
+      document.getElementById('myBookingsModal')?.classList.remove('hidden');
+    }
+
+    function closeMyBookingsModal() {
+      document.getElementById('myBookingsModal')?.classList.add('hidden');
+    }
+
+    function cancelBooking(index) {
+      const removed = confirmedBookings.splice(index, 1);
+      saveBookingsToStorage();
+      openMyBookingsModal();
+      showToast(`Booking ${removed[0]?.id || ''} removed`, "🗑️");
+    }
+
+    function addToPlan(name, price, type, btnEl) {
+      const existingIndex = cartItems.findIndex(i => i.name === name);
+
+      if (existingIndex === -1) {
+        cartItems.push({ name, price, type });
+        if (btnEl) {
+          btnEl.dataset.originalText = btnEl.innerHTML;
+          btnEl.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Selected in Plan`;
+          btnEl.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs uppercase transition shadow ring-2 ring-emerald-400";
         }
+        showToast(`✓ Added to Plan: ${name}`, "✅");
+      } else {
+        cartItems.splice(existingIndex, 1);
+        if (btnEl) {
+          btnEl.innerHTML = btnEl.dataset.originalText || "+ Add to Plan";
+          btnEl.className = "w-full bg-royal-cream border border-royal-gold/40 text-royal-900 py-2 rounded-xl font-bold text-xs uppercase hover:bg-stone-100 transition";
+        }
+        showToast(`Removed from Plan: ${name}`, "🗑️");
       }
-    }
 
-    function updateCateringCalculation() {
-      const slider = document.getElementById('guestSlider');
-      const guests = slider ? parseInt(slider.value, 10) : 350;
-      const label = document.getElementById('guestCountLabel');
-      if (label) label.innerText = guests;
+      const stickyBar = document.getElementById('stickyPlanBar');
+      if (stickyBar) {
+        stickyBar.classList.add('scale-105');
+        setTimeout(() => stickyBar.classList.remove('scale-105'), 250);
+      }
 
-      const selectedPlate = cartItems.find(i => i.type === 'plate');
-      const platePrice = selectedPlate ? selectedPlate.price : 1200;
-      const total = platePrice * guests;
-
-      const totalLabel = document.getElementById('totalCateringCostLabel');
-      if (totalLabel) totalLabel.innerText = '₹' + total.toLocaleString('en-IN');
       updateCartDisplay();
     }
 
-    function updateBudgetBreakdown() {
-      const slider = document.getElementById('budgetSlider');
-      const val = slider ? parseInt(slider.value, 10) : 2500000;
-      const disp = document.getElementById('targetBudgetDisplay');
-      if (disp) disp.innerText = '₹' + val.toLocaleString('en-IN');
+    function updateCartDisplay() {
+      const countLabel = document.getElementById('cartCountLabel');
+      const totalLabel = document.getElementById('cartTotalLabel');
+      const guests = parseInt(document.getElementById('guestSlider')?.value || "350", 10);
 
-      const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
-      const setEl = (id, n) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = fmt(n);
-      };
+      let sum = 0;
+      cartItems.forEach(item => {
+        if (item.type === 'plate') {
+          sum += (item.price * guests);
+        } else {
+          sum += item.price;
+        }
+      });
 
-      setEl('bgtCatering', val * 0.35);
-      setEl('bgtVenue', val * 0.25);
-      setEl('bgtDecor', val * 0.15);
-      setEl('bgtPhoto', val * 0.10);
-      setEl('bgtDj', val * 0.08);
-      setEl('bgtCards', val * 0.07);
+      if (countLabel) countLabel.innerText = `${cartItems.length} Items`;
+      if (totalLabel) totalLabel.innerText = '₹' + sum.toLocaleString('en-IN');
     }
-
-    let rsvpList = [
-      { id: 1, name: "Rajesh & Sunita Sharma", diet: "Pure Veg", status: "Confirmed" },
-      { id: 2, name: "Vikram Rathore Family", diet: "Jain Meal", status: "Confirmed" },
-      { id: 3, name: "Kunal Mehra", diet: "Multi-Cuisine", status: "Pending" }
-    ];
 
     function renderRsvpTable() {
       const tbody = document.getElementById('rsvpTableBody');
@@ -1593,209 +2319,40 @@
       showToast("Guest removed from RSVP", "🗑️");
     }
 
-    let checklistItems = [
-      { id: 1, text: "Book Shahi Catering & finalize royal menu", done: true },
-      { id: 2, text: "Choose & customize Wedding Card theme", done: true },
-      { id: 3, text: "Lock Destination Palace or Banquet Hall", done: true },
-      { id: 4, text: "Book Candid 4K Cinematographer & Drone team", done: true },
-      { id: 5, text: "Schedule Bridal Makeup & Mehendi trial session", done: false },
-      { id: 6, text: "Confirm Bollywood DJ & Punjabi Dhol playlist", done: false }
-    ];
-
     function renderChecklist() {
       const container = document.getElementById('checklistItemsContainer');
+      const progressLabel = document.getElementById('checklistProgress');
       if (!container) return;
+
       container.innerHTML = '';
-      let completed = 0;
+      let doneCount = 0;
 
       checklistItems.forEach(item => {
-        if (item.done) completed++;
+        if (item.done) doneCount++;
         const div = document.createElement('div');
-        div.className = `flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${item.done ? 'bg-emerald-50/70 border-emerald-200 line-through text-stone-500' : 'bg-royal-cream border-royal-gold/30 text-stone-800'}`;
-        div.onclick = () => toggleChecklist(item.id);
+        div.className = `p-3 rounded-xl border flex items-center justify-between cursor-pointer transition ${item.done ? 'bg-emerald-50/70 border-emerald-300 text-stone-700 line-through' : 'bg-white border-stone-200 text-stone-800 hover:border-royal-gold'}`;
+        div.onclick = () => toggleChecklistItem(item.id);
         div.innerHTML = `
-          <div class="flex items-center gap-2.5">
-            <span class="w-4 h-4 rounded-full border flex items-center justify-center text-[10px] ${item.done ? 'bg-emerald-600 text-white border-emerald-600' : 'border-stone-400'}">
+          <div class="flex items-center gap-2">
+            <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${item.done ? 'bg-emerald-600 text-white' : 'border border-stone-400'}">
               ${item.done ? '✓' : ''}
             </span>
             <span class="font-medium">${item.text}</span>
           </div>
-          <span class="text-[10px] font-bold ${item.done ? 'text-emerald-700' : 'text-royal-crimson'}">
-            ${item.done ? 'Done' : 'Pending'}
-          </span>
+          <span class="text-[10px] text-stone-400">${item.done ? 'Done' : 'Pending'}</span>
         `;
         container.appendChild(div);
       });
 
-      const progLabel = document.getElementById('checklistProgress');
-      if (progLabel) progLabel.innerText = `${completed} of ${checklistItems.length} Done`;
+      if (progressLabel) progressLabel.innerText = `${doneCount} of ${checklistItems.length} Done`;
     }
 
-    function toggleChecklist(id) {
+    function toggleChecklistItem(id) {
       const item = checklistItems.find(x => x.id === id);
       if (item) {
         item.done = !item.done;
         renderChecklist();
-        showToast(item.done ? "Marked as completed!" : "Marked as pending", "📋");
       }
-    }
-
-    function showToast(msg, icon = "✨") {
-      const box = document.getElementById('toastBox');
-      const msgEl = document.getElementById('toastMsg');
-      const iconEl = document.getElementById('toastIcon');
-      if (!box || !msgEl) return;
-
-      msgEl.innerText = msg;
-      if (iconEl) iconEl.innerText = icon;
-
-      box.classList.remove('translate-x-32', 'opacity-0', 'pointer-events-none');
-      box.classList.add('translate-x-0', 'opacity-100');
-
-      clearTimeout(window._toastTimeout);
-      window._toastTimeout = setTimeout(() => {
-        box.classList.remove('translate-x-0', 'opacity-100');
-        box.classList.add('translate-x-32', 'opacity-0', 'pointer-events-none');
-      }, 3000);
-    }
-
-    function shareWhatsAppCard() {
-      const groom = document.getElementById('inpGroom')?.value || 'Aarav Sharma';
-      const bride = document.getElementById('inpBride')?.value || 'Ananya Rathore';
-      const date = document.getElementById('inpDate')?.value || 'Sunday, 14th December 2026';
-      const time = document.getElementById('inpTime')?.value || '07:00 PM Onwards';
-      const venue = document.getElementById('inpVenue')?.value || 'The Oberoi Udaivilas, Lake Pichola, Udaipur';
-      const host = document.getElementById('inpHost')?.value || 'Sharma & Rathore Family Cordially Invites You';
-
-      const text = `✨ *SHUBH VIVAAH INVITATION* ✨\n\n${host}\n\n🤵 *${groom}* Weds 👰 *${bride}*\n\n📅 *Tareekh:* ${date} (${time})\n📍 *Venue:* ${venue}\n\n*Created via Vivaah Sutra Royal Planner*`;
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
-    }
-
-    function renderCardsGallery(items) {
-      const grid = document.getElementById('cardsGalleryGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      items.forEach((item) => {
-        const isSelected = (currentTheme && currentTheme.id === item.id);
-        const div = document.createElement('div');
-        div.id = `theme-card-${item.id}`;
-        div.className = `${item.bg} ${item.text} ${item.border} border-2 rounded-xl p-2.5 text-center cursor-pointer shadow transition duration-200 flex flex-col justify-between h-28 relative ${isSelected ? 'ring-4 ring-amber-400 ring-offset-2 scale-105 shadow-2xl z-10' : 'hover:scale-105 opacity-90 hover:opacity-100'}`;
-        div.onclick = () => selectCardTheme(item.id);
-        div.innerHTML = `
-          ${isSelected ? '<span class="absolute -top-2 -right-2 bg-amber-400 text-stone-900 rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-black shadow-lg">✓</span>' : ''}
-          <div class="text-[9px] font-bold uppercase tracking-wider opacity-75">Theme #${item.id}</div>
-          <div class="font-cinzel font-bold text-[11px] leading-tight line-clamp-2 my-1">${item.name}</div>
-          <div class="text-[9px] font-bold ${isSelected ? 'text-amber-300' : 'underline opacity-90'}">${isSelected ? '● Selected' : 'Preview'}</div>
-        `;
-        grid.appendChild(div);
-      });
-    }
-
-    function filterCards(category) {
-      currentCategory = category;
-      document.querySelectorAll('.card-filter-btn').forEach(b => {
-        b.classList.remove('bg-royal-crimson', 'text-white');
-        b.classList.add('bg-white', 'text-stone-700');
-      });
-      if (window.event && window.event.target) {
-        window.event.target.classList.remove('bg-white', 'text-stone-700');
-        window.event.target.classList.add('bg-royal-crimson', 'text-white');
-      }
-
-      if (category === 'all') {
-        renderCardsGallery(cardThemes);
-      } else {
-        const filtered = cardThemes.filter(c => c.cat === category);
-        renderCardsGallery(filtered);
-      }
-    }
-
-    function selectCardTheme(id) {
-      currentTheme = cardThemes.find(t => t.id === id) || cardThemes[0];
-      const activeLabel = document.getElementById('activeThemeLabel');
-      if (activeLabel) activeLabel.innerText = `#${currentTheme.id} ${currentTheme.name}`;
-
-      const card = document.getElementById('live-card-container');
-      if (card) {
-        cardThemes.forEach(t => {
-          card.className = card.className.replace(t.bg, '').replace(t.text, '').replace(t.border, '');
-        });
-        card.className = `w-full max-w-md p-8 rounded-3xl shadow-2xl text-center border-4 relative transition-all duration-300 min-h-[550px] flex flex-col justify-between ${currentTheme.bg} ${currentTheme.text} ${currentTheme.border}`;
-      }
-
-      if (currentCategory === 'all') {
-        renderCardsGallery(cardThemes);
-      } else {
-        renderCardsGallery(cardThemes.filter(c => c.cat === currentCategory));
-      }
-
-      showToast(`Selected Theme: #${currentTheme.id} ${currentTheme.name}`, "🎨");
-      if (window.innerWidth < 1024 && card) {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    }
-
-    function addToPlan(name, price, type, btnEl) {
-      const triggerBtn = btnEl || (window.event ? window.event.target.closest('button') : null);
-      togglePlanItem(name, price, type, triggerBtn);
-    }
-
-    function togglePlanItem(name, price, type, btnEl) {
-      const existingIndex = cartItems.findIndex(i => i.name === name);
-
-      if (existingIndex === -1) {
-        cartItems.push({ name, price, type });
-        if (btnEl) {
-          btnEl.dataset.originalText = btnEl.innerHTML;
-          btnEl.innerHTML = `<i class="fas fa-check-circle mr-1"></i> Selected in Plan`;
-          btnEl.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 rounded-xl font-bold text-xs uppercase transition shadow ring-2 ring-emerald-400";
-        }
-        showToast(`✓ Added to Plan: ${name}`, "✅");
-      } else {
-        cartItems.splice(existingIndex, 1);
-        if (btnEl) {
-          btnEl.innerHTML = btnEl.dataset.originalText || "Add to Plan";
-          btnEl.className = "w-full bg-royal-crimson hover:bg-royal-900 text-white py-2.5 rounded-xl font-bold text-xs uppercase transition shadow";
-        }
-        showToast(`Removed from Plan: ${name}`, "🗑️");
-      }
-
-      const stickyBar = document.getElementById('stickyPlanBar');
-      if (stickyBar) {
-        stickyBar.classList.add('scale-105');
-        setTimeout(() => stickyBar.classList.remove('scale-105'), 250);
-      }
-
-      updateCartDisplay();
-    }
-
-    function toggleAddon(name, price, checkbox) {
-      if (checkbox.checked) {
-        cartItems.push({ name, price, type: 'fixed' });
-        showToast(`✓ Added Addon: ${name}`, "🔥");
-      } else {
-        cartItems = cartItems.filter(i => i.name !== name);
-        showToast(`Removed Addon: ${name}`, "🗑️");
-      }
-      updateCartDisplay();
-    }
-
-    function updateCartDisplay() {
-      const countLabel = document.getElementById('cartCountLabel');
-      const totalLabel = document.getElementById('cartTotalLabel');
-      const guests = parseInt(document.getElementById('guestSlider')?.value || "350", 10);
-
-      let sum = 0;
-      cartItems.forEach(item => {
-        if (item.type === 'plate') {
-          sum += (item.price * guests);
-        } else {
-          sum += item.price;
-        }
-      });
-
-      if (countLabel) countLabel.innerText = `${cartItems.length} Items`;
-      if (totalLabel) totalLabel.innerText = '₹' + sum.toLocaleString('en-IN');
     }
 
     function openConsultationModal() {
@@ -1808,46 +2365,13 @@
 
     function handleConsultSubmit(e) {
       e.preventDefault();
+      const name = document.getElementById('consultClientName')?.value || 'Guest';
+      const phone = document.getElementById('consultClientPhone')?.value || '';
+      const city = document.getElementById('consultClientCity')?.value || 'Destination';
+      const guests = document.getElementById('consultClientGuests')?.value || '350';
+
       closeConsultationModal();
-      showToast("Aapki inquiry record ho gayi hai! Concierge aapse 30 min me sampark karega.", "👑");
-    }
-
-    function generateAiCardShloka() {
-      const groom = document.getElementById('inpGroom')?.value || 'Aarav';
-      const bride = document.getElementById('inpBride')?.value || 'Ananya';
-      const hostEl = document.getElementById('inpHost');
-      
-      const shlokas = [
-        `मंगलम् भगवान विष्णुः मंगलम् गरुड़ध्वजः। ${groom} एवं ${bride} के शुभ परिणय में सपरिवार सादर आमंत्रित हैं।`,
-        `वक्रतुण्ड महाकाय सूर्यकोटि समप्रभ। निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा॥ ${groom} Weds ${bride}`,
-        `दो दिलों का मिलन, सात फेरों का बंधन। ${groom} और ${bride} के शुभ विवाह में आपका आशीर्वाद सादर प्रार्थनीय है।`,
-        `स्नेह, समर्पण और सात जन्मों का वादा। ${groom} संग ${bride} के पावन परिणय में हार्दिक स्वागत है।`
-      ];
-
-      const selected = shlokas[Math.floor(Math.random() * shlokas.length)];
-      if (hostEl) {
-        hostEl.value = selected;
-        refreshCardPreview();
-      }
-      showToast("Auspicious AI Shloka card me add ho gaya!", "📜");
-    }
-
-    function generateAiCardAudioVoiceover() {
-      const groom = document.getElementById('inpGroom')?.value || 'Aarav';
-      const bride = document.getElementById('inpBride')?.value || 'Ananya';
-      const date = document.getElementById('inpDate')?.value || '14th December 2026';
-      const venue = document.getElementById('inpVenue')?.value || 'The Oberoi Udaivilas, Udaipur';
-
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const speech = new SpeechSynthesisUtterance(`Shubh Vivah! You are cordially invited to celebrate the royal wedding of ${groom} and ${bride} on ${date} at ${venue}. We look forward to your gracious presence and blessings!`);
-        speech.rate = 0.95;
-        speech.pitch = 1.05;
-        window.speechSynthesis.speak(speech);
-        showToast("Playing royal wedding audio announcement!", "🎙️");
-      } else {
-        showToast("Audio invitation synthesized!", "🎙️");
-      }
+      showToast(`Shubh Vivah! ${name}, your inquiry has been recorded. Our concierge will contact you on ${phone}.`, "👑");
     }
 
     function openAiMenuModal() {
@@ -1932,6 +2456,7 @@
       updateBudgetBreakdown();
       renderRsvpTable();
       renderChecklist();
+      updateBookingsBadge();
     };
   </script>
 </body>
