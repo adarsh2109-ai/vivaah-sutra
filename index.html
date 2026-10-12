@@ -1,30 +1,20 @@
-```html
 <!DOCTYPE html>
 <html lang="hi" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Vivaah Sutra - Royal Wedding Concierge & Planner</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivaah Sutra - Royal Wedding & Event Concierge</title>
   <!-- Royal Crown Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
-  
-  <!-- PWA & Mobile Meta Tags -->
-  <meta name="theme-color" content="#4a0814">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Vivaah Sutra">
-  <link rel="manifest" href="manifest.json">
-
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts -->
+  <!-- Google Fonts CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome CDN -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600;700&family=Rozha+One&family=Yatra+One&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- html2canvas for instant HD Card & Slip Downloads -->
+  <!-- html2canvas Library for High-Res Card Image Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
@@ -33,331 +23,306 @@
         extend: {
           colors: {
             royal: {
-              950: '#140205',
-              900: '#2b040c',
-              800: '#4a0814',
-              700: '#6c0c1e',
+              950: '#1a0307',
+              900: '#34060e',
+              800: '#4e0a16',
+              700: '#751022',
               crimson: '#8a1027',
               gold: '#c99826',
-              'gold-light': '#f5df8e',
+              'gold-light': '#f3db83',
               'gold-dark': '#9b7113',
-              cream: '#fdfbf7',
-              silk: '#fcf8f0'
+              cream: '#fdfbf7'
             }
           },
           fontFamily: {
             cinzel: ['Cinzel', 'serif'],
             vibes: ['"Great Vibes"', 'cursive'],
             playfair: ['"Playfair Display"', 'serif'],
-            poppins: ['Poppins', 'sans-serif']
+            poppins: ['Poppins', 'sans-serif'],
+            rozha: ['"Rozha One"', 'serif']
           }
         }
       }
     };
   </script>
-
   <style>
-    /* Mobile-first touch enhancements */
-    body {
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    input, textarea, select {
-      user-select: text;
-    }
     .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
+      width: 6px;
+      height: 6px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background-color: #c99826;
-      border-radius: 999px;
+      border-radius: 4px;
     }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #fdfbf7;
     }
-    .pulse-glow {
-      box-shadow: 0 0 25px rgba(201, 152, 38, 0.45);
-    }
-    @keyframes spin-slow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .animate-spin-slow {
-      animation: spin-slow 18s linear infinite;
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #live-card-container, #live-card-container * {
+        visibility: visible;
+      }
+      #live-card-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        box-shadow: none;
+        border-width: 2px;
+      }
     }
   </style>
 </head>
-<body class="bg-royal-silk text-stone-800 font-poppins pb-24 md:pb-12 antialiased selection:bg-royal-gold selection:text-royal-950">
+<body class="bg-[#fcf9f2] text-stone-800 font-poppins selection:bg-royal-gold selection:text-royal-950">
 
-  <!-- TOP MOBILE APP BAR -->
-  <header class="sticky top-0 z-40 bg-royal-950/95 backdrop-blur-md border-b border-royal-gold/30 text-white shadow-lg px-4 py-2.5">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      
-      <!-- Brand & Auspicious Symbol -->
-      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
-        <div class="relative w-10 h-10 rounded-full border border-royal-gold flex items-center justify-center bg-gradient-to-tr from-royal-900 to-royal-800 text-royal-gold-light shadow-md">
-          <span class="font-cinzel font-black text-sm">VS</span>
-          <span class="absolute -top-1 -right-1 text-xs">👑</span>
+  <!-- Top Auspicious Announcement Bar -->
+  <div class="bg-royal-950 text-royal-gold-light text-xs py-2 px-4 text-center border-b border-royal-gold/40 flex justify-between items-center tracking-wider">
+    <span class="hidden sm:inline">🕉️ SHUBH VIVAAH & ROYAL EVENT CONCIERGE</span>
+    <span class="mx-auto font-medium">⚡ FLAT 15% EARLY-BIRD DISCOUNT ON DESTINATION WEDDINGS</span>
+    <span class="hidden sm:inline"><i class="fas fa-phone-alt mr-1"></i> HELPLINE: +91 98765 43210</span>
+  </div>
+
+  <!-- Primary Header & Navigation -->
+  <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-md border-b border-royal-gold/30">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('catering')">
+        <div class="w-12 h-12 rounded-full border-2 border-royal-gold flex items-center justify-center bg-royal-900 text-royal-gold-light shadow-inner font-cinzel font-bold text-xl">
+          VS
         </div>
         <div>
-          <div class="flex items-center gap-1.5">
-            <h1 class="font-cinzel font-bold text-lg text-royal-gold-light tracking-wide leading-none">Vivaah Sutra</h1>
-            <span class="bg-royal-gold/25 text-royal-gold-light text-[9px] px-1.5 py-0.5 rounded-full border border-royal-gold/40">PRO</span>
-          </div>
-          <p class="text-[9px] text-stone-300 font-medium tracking-widest uppercase">Royal Indian Weddings</p>
+          <h1 class="font-cinzel font-black text-2xl text-royal-crimson tracking-wider">Vivaah Sutra</h1>
+          <p class="text-[10px] text-royal-gold font-medium uppercase tracking-widest">Royal Wedding Planner</p>
         </div>
       </div>
 
-      <!-- Quick Action Controls (Audio Ambience, WhatsApp Support, Bookings) -->
-      <div class="flex items-center space-x-2">
-        <!-- Shehnai Ambient Sound Toggle -->
-        <button id="btnAudioToggle" onclick="toggleRoyalAudio()" title="Royal Shehnai Sound" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 border border-royal-gold/40 text-royal-gold-light flex items-center justify-center text-xs transition">
-          <i id="audioIcon" class="fas fa-volume-mute"></i>
+      <!-- Desktop Tab Navigation -->
+      <nav class="hidden xl:flex items-center space-x-1.5 bg-royal-cream p-1.5 rounded-full border border-royal-gold/30 shadow-inner text-xs font-semibold">
+        <button onclick="switchTab('catering')" id="tab-btn-catering" class="tab-nav-btn px-3.5 py-1.5 rounded-full bg-royal-crimson text-white shadow transition">
+          <i class="fas fa-utensils mr-1"></i> Catering
         </button>
+        <button onclick="switchTab('card')" id="tab-btn-card" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-envelope-open-text mr-1"></i> Wedding Cards
+        </button>
+        <button onclick="switchTab('destination')" id="tab-btn-destination" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-chess-rook mr-1"></i> Palaces & Forts
+        </button>
+        <button onclick="switchTab('vendors')" id="tab-btn-vendors" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-camera mr-1"></i> Photo & Makeup
+        </button>
+        <button onclick="switchTab('music')" id="tab-btn-music" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-music mr-1"></i> DJ & Music
+        </button>
+        <button onclick="switchTab('hotels')" id="tab-btn-hotels" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-hotel mr-1"></i> Hotels & Halls
+        </button>
+        <button onclick="switchTab('tools')" id="tab-btn-tools" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-clipboard-check mr-1"></i> RSVP & Checklist
+        </button>
+        <button onclick="switchTab('budget')" id="tab-btn-budget" class="tab-nav-btn px-3.5 py-1.5 rounded-full text-stone-700 hover:text-royal-crimson transition">
+          <i class="fas fa-calculator mr-1"></i> Budget
+        </button>
+      </nav>
 
-        <!-- Direct WhatsApp Concierge -->
-        <a href="https://wa.me/919876543210?text=Namaste%20Vivaah%20Sutra!%20Mujhe%20wedding%20planning%20aur%20packages%20ke%20baare%20me%20jaankari%20chahiye." target="_blank" class="w-9 h-9 rounded-full bg-emerald-600/90 hover:bg-emerald-600 text-white flex items-center justify-center text-sm shadow transition">
-          <i class="fab fa-whatsapp"></i>
-        </a>
-
-        <!-- My Bookings Badge Button -->
-        <button onclick="openMyBookingsModal()" class="relative px-3 py-1.5 rounded-full bg-gradient-to-r from-royal-gold to-royal-gold-dark text-royal-950 font-bold text-xs flex items-center gap-1.5 shadow-md">
-          <i class="fas fa-receipt text-[11px]"></i>
-          <span class="hidden sm:inline">Bookings</span>
+      <div class="flex items-center gap-2">
+        <button onclick="openMyBookingsModal()" class="relative px-3.5 py-2 rounded-full border border-royal-crimson/30 hover:border-royal-crimson text-royal-crimson font-bold text-xs bg-rose-50/70 hover:bg-rose-100/70 transition flex items-center gap-1.5 shadow-sm">
+          <i class="fas fa-receipt"></i>
+          <span class="hidden sm:inline">My Bookings</span>
           <span id="navBookingsBadge" class="hidden w-4 h-4 rounded-full bg-royal-crimson text-white text-[9px] font-bold items-center justify-center">0</span>
         </button>
+        <button onclick="openConsultationModal()" class="bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 text-xs font-bold px-4 py-2 rounded-full shadow-lg border border-white/40 transition transform hover:scale-105 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fas fa-calendar-check"></i> Book Consultation
+        </button>
       </div>
+    </div>
 
+    <!-- Mobile Sub-Navigation -->
+    <div class="xl:hidden bg-royal-cream border-t border-royal-gold/20 px-3 py-2 flex overflow-x-auto space-x-2 custom-scrollbar">
+      <button onclick="switchTab('catering')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-royal-crimson text-white">Catering</button>
+      <button onclick="switchTab('card')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Cards</button>
+      <button onclick="switchTab('destination')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Palaces</button>
+      <button onclick="switchTab('vendors')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Photo & Makeup</button>
+      <button onclick="switchTab('music')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">DJ & Music</button>
+      <button onclick="switchTab('hotels')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Hotels</button>
+      <button onclick="switchTab('tools')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">RSVP & Tools</button>
+      <button onclick="switchTab('budget')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Budget</button>
     </div>
   </header>
 
-  <!-- AUSPICIOUS LIVE COUNTDOWN PILL BAR -->
-  <div class="bg-gradient-to-r from-royal-900 via-royal-crimson to-royal-950 text-white py-2 px-4 text-center border-b border-royal-gold/30">
-    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between text-xs gap-2">
-      <div class="flex items-center gap-1.5 text-royal-gold-light mx-auto sm:mx-0 font-medium">
-        <span>🕉️</span>
-        <span class="text-[11px]">Next Auspicious Lagna: <b>14 Dec 2026</b></span>
+  <!-- VENUE & HOTEL DETAILS MODAL (POPUP WITH RATINGS, PHOTOS & AMENITIES) -->
+  <div id="venueDetailModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 md:p-6 overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border-2 border-royal-gold relative my-auto">
+      <button onclick="closeVenueDetailModal()" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition shadow-lg">
+        ✕
+      </button>
+
+      <!-- Main Photo Header -->
+      <div class="relative h-60 sm:h-72 w-full overflow-hidden">
+        <img id="modalVenueImg" src="" alt="Venue Image" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+        <div class="absolute bottom-4 left-5 right-5 text-white">
+          <div class="flex items-center gap-2 mb-1">
+            <span id="modalVenueCategory" class="text-[10px] font-bold uppercase tracking-wider bg-royal-gold text-royal-950 px-2.5 py-0.5 rounded-full">Destination Palace</span>
+            <span class="text-xs bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <i class="fas fa-star text-amber-300"></i> <span id="modalVenueRating">4.8</span>
+            </span>
+            <span id="modalVenueReviews" class="text-[10px] text-stone-200 font-medium">(2,450+ Verified Reviews)</span>
+          </div>
+          <h3 id="modalVenueTitle" class="text-2xl font-cinzel font-bold text-royal-gold-light leading-snug">Venue Name</h3>
+          <p id="modalVenueLocation" class="text-xs text-stone-200 mt-0.5 flex items-center gap-1.5">
+            <i class="fas fa-map-marker-alt text-royal-gold"></i> <span>City, State</span>
+          </p>
+        </div>
       </div>
-      <div id="countdownBox" class="flex items-center gap-2 mx-auto sm:mx-0 font-mono text-[11px] bg-black/40 px-3 py-0.5 rounded-full border border-royal-gold/30 text-royal-gold-light">
-        <span id="cntDays">00</span>d :
-        <span id="cntHours">00</span>h :
-        <span id="cntMins">00</span>m :
-        <span id="cntSecs">00</span>s
+
+      <div class="p-5 md:p-6 space-y-4 text-xs max-h-[50vh] overflow-y-auto custom-scrollbar">
+        <!-- Photo Gallery Thumbnails -->
+        <div>
+          <p class="font-bold text-stone-700 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+            <span>📸</span> Palace & Banquet Gallery
+          </p>
+          <div id="modalGalleryThumbnails" class="grid grid-cols-3 gap-2"></div>
+        </div>
+
+        <!-- Description -->
+        <div>
+          <p class="font-bold text-stone-700 uppercase tracking-wider text-[11px] mb-1">About This Royal Property</p>
+          <p id="modalVenueDesc" class="text-stone-600 leading-relaxed text-xs">Property detailed description here.</p>
+        </div>
+
+        <!-- Amenities Pills -->
+        <div>
+          <p class="font-bold text-stone-700 uppercase tracking-wider text-[11px] mb-2">Signature Wedding Amenities</p>
+          <div id="modalVenueAmenities" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- Pricing & Contact Box -->
+        <div class="bg-royal-cream rounded-2xl p-4 border border-royal-gold/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <p class="text-[10px] text-stone-500 uppercase font-bold tracking-wider">Estimated Event Package / Room Block</p>
+            <p id="modalVenuePrice" class="text-xl font-cinzel font-extrabold text-royal-crimson">₹45,00,000</p>
+            <p id="modalVenueCapacity" class="text-[11px] text-stone-600 mt-0.5">Capacity: 1,200 Guests | 200 Heritage Rooms</p>
+          </div>
+          <div class="flex flex-wrap gap-2 w-full sm:w-auto">
+            <a id="modalVenuePhoneLink" href="tel:+912942433300" class="flex-1 sm:flex-none px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold flex items-center justify-center gap-1.5 shadow transition">
+              <i class="fas fa-phone-alt"></i> Call Desk
+            </a>
+            <a id="modalVenueMapsLink" href="#" target="_blank" class="flex-1 sm:flex-none px-4 py-2 bg-royal-950 hover:bg-royal-900 text-royal-gold-light border border-royal-gold/50 rounded-xl font-bold flex items-center justify-center gap-1.5 shadow transition">
+              <i class="fas fa-directions"></i> Maps & Directions
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Action -->
+      <div class="p-4 bg-stone-50 border-t flex items-center justify-end gap-3">
+        <button onclick="closeVenueDetailModal()" class="px-5 py-2 text-stone-600 hover:text-stone-900 font-semibold text-xs">
+          Close
+        </button>
+        <button id="modalVenueAddBtn" class="px-6 py-2 bg-royal-crimson hover:bg-royal-900 text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow">
+          Select This Venue
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- MAIN SCROLLABLE APP VIEWPORT -->
-  <main class="max-w-6xl mx-auto px-3 sm:px-4 py-4 space-y-6">
+  <!-- HERO SHOWCASE SECTION -->
+  <section class="bg-gradient-to-r from-royal-950 via-royal-900 to-royal-800 text-white py-10 md:py-14 px-4 relative overflow-hidden border-b-4 border-royal-gold shadow-md">
+    <div class="max-w-5xl mx-auto text-center relative z-10">
+      <span class="inline-block bg-royal-gold/20 text-royal-gold-light text-xs px-4 py-1 rounded-full uppercase tracking-widest font-semibold border border-royal-gold/40 mb-3">
+        👑 Royal Indian Weddings & Banquets
+      </span>
+      <h2 class="text-3xl md:text-5xl font-cinzel font-bold mb-3 leading-tight drop-shadow">
+        Aapke Sapno Ki Shaadi, <span class="text-royal-gold-light italic font-playfair font-normal">Ek Hi Jagah</span>
+      </h2>
+      <p class="text-xs md:text-sm text-stone-200 max-w-2xl mx-auto font-light leading-relaxed mb-6">
+        Royal catering packages, bespoke designer wedding e-invites, destination fort palaces, makeup artists, photography, pandit ji booking, baraat entries aur heritage hotels – sab kuch single dashboard me.
+      </p>
 
-    <!-- INSTAGRAM-STYLE INSPIRATION STORIES -->
-    <div class="bg-white rounded-2xl p-3 border border-royal-gold/25 shadow-sm">
-      <div class="flex items-center justify-between mb-2 px-1">
-        <span class="text-[11px] font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1">
-          <span>✨</span> Wedding Inspirations
-        </span>
-        <span class="text-[10px] text-royal-crimson font-medium cursor-pointer" onclick="openStoryViewer(0)">View All</span>
+      <!-- 4 Quick Highlight Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-3xl mx-auto text-left text-xs mb-6">
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-2.5 rounded-xl flex items-center gap-2.5">
+          <span class="text-lg">🍽️</span>
+          <div>
+            <p class="font-bold text-royal-gold-light">Shahi Catering</p>
+            <p class="text-[10px] text-stone-300">Pure Veg & Live Counters</p>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-2.5 rounded-xl flex items-center gap-2.5">
+          <span class="text-lg">💌</span>
+          <div>
+            <p class="font-bold text-royal-gold-light">Wedding Cards</p>
+            <p class="text-[10px] text-stone-300">Custom E-Cards, QR & Voice</p>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-2.5 rounded-xl flex items-center gap-2.5">
+          <span class="text-lg">📸</span>
+          <div>
+            <p class="font-bold text-royal-gold-light">Photo & Makeup</p>
+            <p class="text-[10px] text-stone-300">4K Drone, HD Airbrush & Decor</p>
+          </div>
+        </div>
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-2.5 rounded-xl flex items-center gap-2.5">
+          <span class="text-lg">🏰</span>
+          <div>
+            <p class="font-bold text-royal-gold-light">Palaces & Hotels</p>
+            <p class="text-[10px] text-stone-300">Verified Contact Desk</p>
+          </div>
+        </div>
       </div>
-      
-      <div class="flex space-x-3.5 overflow-x-auto custom-scrollbar pb-1 text-center">
-        <!-- Story 1 -->
-        <div class="flex-shrink-0 cursor-pointer group" onclick="openStoryViewer(0)">
-          <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-600 to-royal-gold mx-auto transition group-hover:scale-105">
-            <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=150&q=80" alt="Palaces" class="w-full h-full rounded-full object-cover border-2 border-white">
-          </div>
-          <span class="text-[10px] font-semibold text-stone-700 mt-1 block">Palaces</span>
-        </div>
 
-        <!-- Story 2 -->
-        <div class="flex-shrink-0 cursor-pointer group" onclick="openStoryViewer(1)">
-          <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-600 to-royal-gold mx-auto transition group-hover:scale-105">
-            <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=150&q=80" alt="Mandap" class="w-full h-full rounded-full object-cover border-2 border-white">
-          </div>
-          <span class="text-[10px] font-semibold text-stone-700 mt-1 block">Mandap</span>
-        </div>
-
-        <!-- Story 3 -->
-        <div class="flex-shrink-0 cursor-pointer group" onclick="openStoryViewer(2)">
-          <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-600 to-royal-gold mx-auto transition group-hover:scale-105">
-            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=150&q=80" alt="Baraat" class="w-full h-full rounded-full object-cover border-2 border-white">
-          </div>
-          <span class="text-[10px] font-semibold text-stone-700 mt-1 block">Baraat</span>
-        </div>
-
-        <!-- Story 4 -->
-        <div class="flex-shrink-0 cursor-pointer group" onclick="openStoryViewer(3)">
-          <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-600 to-royal-gold mx-auto transition group-hover:scale-105">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=150&q=80" alt="Feasts" class="w-full h-full rounded-full object-cover border-2 border-white">
-          </div>
-          <span class="text-[10px] font-semibold text-stone-700 mt-1 block">Feasts</span>
-        </div>
-
-        <!-- Story 5 -->
-        <div class="flex-shrink-0 cursor-pointer group" onclick="openStoryViewer(4)">
-          <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-rose-600 to-royal-gold mx-auto transition group-hover:scale-105">
-            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=150&q=80" alt="Beach" class="w-full h-full rounded-full object-cover border-2 border-white">
-          </div>
-          <span class="text-[10px] font-semibold text-stone-700 mt-1 block">Goa Sunset</span>
-        </div>
+      <div class="flex flex-wrap justify-center gap-3">
+        <button onclick="switchTab('card')" class="bg-royal-gold hover:bg-royal-gold-light text-royal-950 font-bold text-xs uppercase px-6 py-3 rounded-full transition shadow-lg tracking-wider">
+          Customize Wedding Cards
+        </button>
+        <button onclick="openAiChatModal()" class="bg-white/15 hover:bg-white/25 border border-royal-gold/60 text-royal-gold-light font-bold text-xs uppercase px-6 py-3 rounded-full transition backdrop-blur-sm flex items-center gap-2">
+          <span>✨</span> Ask Vivaah AI Assistant
+        </button>
       </div>
     </div>
+  </section>
 
-    <!-- TAB 1: HOME & DASHBOARD -->
-    <section id="sec-home" class="tab-content block space-y-6">
-      
-      <!-- HERO CAROUSEL BANNER -->
-      <div class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-royal-950 via-royal-900 to-royal-800 text-white p-6 md:p-8 border-2 border-royal-gold/40 shadow-xl">
-        <div class="relative z-10 max-w-lg space-y-3">
-          <span class="inline-block bg-royal-gold/20 text-royal-gold-light text-[10px] px-3 py-1 rounded-full uppercase tracking-widest font-semibold border border-royal-gold/40">
-            👑 Shubh Vivah 2026 Concierge
-          </span>
-          <h2 class="text-2xl sm:text-4xl font-cinzel font-black leading-tight">
-            Design Your <span class="text-royal-gold-light italic font-playfair">Royal Indian</span> Dream Wedding
-          </h2>
-          <p class="text-xs text-stone-200 leading-relaxed">
-            One-touch palace buyouts, pure vegetarian live feasts, Sanskrit designer cards, and verified 4K cinematography.
-          </p>
-          <div class="flex flex-wrap gap-2 pt-2">
-            <button onclick="switchTab('cards')" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-royal-gold to-royal-gold-dark hover:from-royal-gold-light hover:to-royal-gold text-royal-950 font-bold text-xs uppercase tracking-wider shadow transition">
-              <i class="fas fa-magic mr-1"></i> Design E-Card
+  <main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- TAB 1: SHAHI CATERING -->
+    <section id="sec-catering" class="tab-content block">
+      <div class="text-center mb-6">
+        <span class="text-royal-gold font-bold uppercase tracking-widest text-xs">Shahi Zaika & Feasts</span>
+        <h3 class="text-3xl font-cinzel font-bold text-royal-crimson">Luxury Catering & Live Counters</h3>
+        <p class="text-stone-600 text-xs mt-1">Per-plate pure vegetarian & multi-cuisine royal feast with dynamic guest calculator</p>
+      </div>
+
+      <!-- Live Dynamic Calculator Box -->
+      <div class="bg-white p-5 rounded-2xl border border-royal-gold/30 shadow-md mb-8">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="w-full md:w-1/2">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-xs font-bold text-stone-700 uppercase">Estimated Guests: <span id="guestCountLabel" class="text-royal-crimson text-sm">350</span> Guests</label>
+              <span class="text-[10px] text-stone-500 font-medium">100 - 2,000 People</span>
+            </div>
+            <input type="range" id="guestSlider" min="100" max="2000" step="50" value="350" oninput="updateCateringCalculation()" class="w-full accent-royal-crimson cursor-pointer">
+          </div>
+          <div class="flex items-center gap-4 bg-royal-cream px-5 py-3 rounded-xl border border-royal-gold/40 w-full md:w-auto justify-between">
+            <div>
+              <p class="text-[10px] uppercase tracking-wider text-stone-500 font-semibold">Estimated Catering Total</p>
+              <p id="totalCateringCostLabel" class="text-xl font-cinzel font-bold text-royal-crimson">₹4,20,000</p>
+            </div>
+            <button onclick="openAiMenuModal()" class="px-3.5 py-2 bg-royal-950 text-royal-gold-light border border-royal-gold/60 rounded-lg text-xs font-bold hover:bg-royal-900 transition flex items-center gap-1.5 shadow">
+              <span>✨</span> AI Curate Menu
             </button>
-            <button onclick="switchTab('muhurat')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-royal-gold/40 text-royal-gold-light font-bold text-xs transition">
-              <i class="fas fa-calendar-alt mr-1"></i> Shubh Muhurat
-            </button>
-          </div>
-        </div>
-        <div class="absolute -right-10 -bottom-10 w-60 h-60 rounded-full border border-royal-gold/20 opacity-30 animate-spin-slow pointer-events-none"></div>
-      </div>
-
-      <!-- 6 QUICK FEATURE TILES (Mobile App Grid) -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        <div onclick="switchTab('palaces')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-800 flex items-center justify-center text-lg mb-2">
-            🏰
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">Palaces & Forts</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">Udaipur, Jaipur, Jodhpur</p>
-          </div>
-        </div>
-
-        <div onclick="switchTab('catering')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center text-lg mb-2">
-            🍽️
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">Shahi Catering</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">Live Counters & Sweets</p>
-          </div>
-        </div>
-
-        <div onclick="switchTab('cards')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-800 flex items-center justify-center text-lg mb-2">
-            💌
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">Cards Studio</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">Audio & Sanskrit Shlokas</p>
-          </div>
-        </div>
-
-        <div onclick="switchTab('vendors')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-800 flex items-center justify-center text-lg mb-2">
-            📸
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">Photo & Makeup</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">4K Drone, HD Airbrush</p>
-          </div>
-        </div>
-
-        <div onclick="switchTab('music')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-800 flex items-center justify-center text-lg mb-2">
-            🥁
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">DJ & Dhol Troupe</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">LED Wall & Baraat Dhol</p>
-          </div>
-        </div>
-
-        <div onclick="switchTab('budget')" class="bg-white p-4 rounded-2xl border border-stone-200 hover:border-royal-gold transition shadow-sm cursor-pointer flex flex-col justify-between">
-          <div class="w-10 h-10 rounded-xl bg-yellow-50 text-yellow-800 flex items-center justify-center text-lg mb-2">
-            💰
-          </div>
-          <div>
-            <h4 class="font-cinzel font-bold text-sm text-stone-900">Budget Tracker</h4>
-            <p class="text-[10px] text-stone-500 mt-0.5">Auto Industry Ratios</p>
           </div>
         </div>
       </div>
 
-    </section>
-
-    <!-- TAB 2: SHUBH MUHURAT CALENDAR 2026-2027 -->
-    <section id="sec-muhurat" class="tab-content hidden space-y-4">
-      <div class="text-center">
-        <span class="text-royal-gold font-bold uppercase tracking-widest text-xs">Vedic Astrology Panchang</span>
-        <h3 class="text-2xl font-cinzel font-bold text-royal-crimson">Shubh Vivah Muhurat 2026-2027</h3>
-        <p class="text-xs text-stone-600 mt-0.5">Auspicious wedding dates with Tithi, Nakshatra and Lagna hours</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- Date Card 1 -->
-        <div class="bg-white p-4 rounded-2xl border border-royal-gold/40 shadow-sm flex items-start justify-between">
+      <!-- Catering Packages -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:border-royal-gold transition p-5 flex flex-col justify-between">
           <div>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Maha Shubh Lagna</span>
-            <h4 class="font-cinzel font-bold text-base text-stone-900 mt-1">14 December 2026 (Monday)</h4>
-            <p class="text-xs text-stone-600 mt-1"><b>Tithi:</b> Shukla Panchami | <b>Nakshatra:</b> Rohini</p>
-            <p class="text-[11px] text-stone-500">Auspicious Window: 07:15 PM to 02:40 AM</p>
-          </div>
-          <button onclick="lockMuhuratDate('14th December 2026')" class="px-3 py-1.5 bg-royal-crimson text-white rounded-xl text-xs font-bold hover:bg-royal-900">
-            Pick Date
-          </button>
-        </div>
-
-        <!-- Date Card 2 -->
-        <div class="bg-white p-4 rounded-2xl border border-royal-gold/40 shadow-sm flex items-start justify-between">
-          <div>
-            <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Amrit Siddhi Yoga</span>
-            <h4 class="font-cinzel font-bold text-base text-stone-900 mt-1">21 December 2026 (Monday)</h4>
-            <p class="text-xs text-stone-600 mt-1"><b>Tithi:</b> Shukla Dwadashi | <b>Nakshatra:</b> Mrigashira</p>
-            <p class="text-[11px] text-stone-500">Auspicious Window: 08:30 PM to 04:10 AM</p>
-          </div>
-          <button onclick="lockMuhuratDate('21st December 2026')" class="px-3 py-1.5 bg-royal-crimson text-white rounded-xl text-xs font-bold hover:bg-royal-900">
-            Pick Date
-          </button>
-        </div>
-
-        <!-- Date Card 3 -->
-        <div class="bg-white p-4 rounded-2xl border border-royal-gold/40 shadow-sm flex items-start justify-between">
-          <div>
-            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Sarvartha Siddhi</span>
-            <h4 class="font-cinzel font-bold text-base text-stone-900 mt-1">18 January 2027 (Monday)</h4>
-            <p class="text-xs text-stone-600 mt-1"><b>Tithi:</b> Shukla Ekadashi | <b>Nakshatra:</b> Uttara Phalguni</p>
-            <p class="text-[11px] text-stone-500">Auspicious Window: 09:20 PM to 05:15 AM</p>
-          </div>
-          <button onclick="lockMuhuratDate('18th January 2027')" class="px-3 py-1.5 bg-royal-crimson text-white rounded-xl text-xs font-bold hover:bg-royal-900">
-            Pick Date
-          </button>
-        </div>
-
-        <!-- Date Card 4 -->
-        <div class="bg-white p-4 rounded-2xl border border-royal-gold/40 shadow-sm flex items-start justify-between">
-          <div>
-            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase">Pushya Nakshatra</span>
-            <h4 class="font-cinzel font-bold text-base text-stone-900 mt-1">24 February 2027 (Wednesday)</h4>
-            <p class="text-xs text-stone-600 mt-1"><b>Tithi:</b> Krishna Chaturthi | <b>Nakshatra:</b> Chitra</p>
-            <p class="text-[11px] text-stone-500">Auspicious Window: 06:45 PM to 01:10 AM</p>
-          </div>
-          <button onclick="lockMuhuratDate('24th February 2027')" class="px-3 py-1.5 bg-royal-crimson text-white rounded-xl text-xs font-bold hover:bg-royal-900">
-            Pick Date
-          </button>
-        </div>
-      </div>
-    </section>
-
-  
+            <div class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full inline-block uppercase mb-2">Pure Veg Heritage</div>
+            <h4 class="text-xl font-cinzel font-bold text-royal-crimson">Rajwada Shahi Thali</h4>
+            <div class="text-2xl font-bold text-royal-gold my-2">₹1,200 <span class="text-xs text-stone-500 font-normal">/ Plate</span></div>
+            <ul class="text-xs text-stone-600 space-y-2 my-4">
+              <li><i class="fas fa-check text-royal-gold mr-1.5"></i> 4 Welcome Mocktails & 3 Soups</li>
+              <li><i class="fas fa-check text-royal-gold mr-1.5"><
