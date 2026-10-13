@@ -139,15 +139,15 @@
     </div>
 
     <!-- Mobile Sub-Navigation -->
-    <div class="xl:hidden bg-royal-cream border-t border-royal-gold/20 px-3 py-2 flex overflow-x-auto space-x-2 custom-scrollbar">
-      <button onclick="switchTab('catering')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-royal-crimson text-white">Catering</button>
-      <button onclick="switchTab('card')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Cards</button>
-      <button onclick="switchTab('destination')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Palaces</button>
-      <button onclick="switchTab('vendors')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Photo & Makeup</button>
-      <button onclick="switchTab('music')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">DJ & Music</button>
-      <button onclick="switchTab('hotels')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Hotels</button>
-      <button onclick="switchTab('tools')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">RSVP & Tools</button>
-      <button onclick="switchTab('budget')" class="whitespace-nowrap px-3 py-1 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30">Budget</button>
+    <div class="xl:hidden bg-royal-cream border-t border-royal-gold/20 px-3 py-2 flex overflow-x-auto space-x-2 custom-scrollbar scroll-smooth">
+      <button onclick="switchTab('catering')" id="mob-tab-btn-catering" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-royal-crimson text-white shadow-md ring-2 ring-royal-gold/50 transition">Catering</button>
+      <button onclick="switchTab('card')" id="mob-tab-btn-card" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">Cards</button>
+      <button onclick="switchTab('destination')" id="mob-tab-btn-destination" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">Palaces</button>
+      <button onclick="switchTab('vendors')" id="mob-tab-btn-vendors" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">Photo & Makeup</button>
+      <button onclick="switchTab('music')" id="mob-tab-btn-music" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">DJ & Music</button>
+      <button onclick="switchTab('hotels')" id="mob-tab-btn-hotels" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">Hotels</button>
+      <button onclick="switchTab('tools')" id="mob-tab-btn-tools" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">RSVP & Tools</button>
+      <button onclick="switchTab('budget')" id="mob-tab-btn-budget" class="mob-tab-btn whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-stone-800 border border-royal-gold/30 transition">Budget</button>
     </div>
   </header>
 
@@ -1389,6 +1389,7 @@
     let activeBookingMeta = {};
 
     function switchTab(tabId) {
+      // 1. Switch active section
       document.querySelectorAll('.tab-content').forEach(el => {
         el.classList.add('hidden');
         el.classList.remove('block');
@@ -1399,6 +1400,7 @@
         activeSec.classList.add('block');
       }
 
+      // 2. Update Desktop navigation buttons
       document.querySelectorAll('.tab-nav-btn').forEach(b => {
         b.classList.remove('bg-royal-crimson', 'text-white', 'shadow');
         b.classList.add('text-stone-700');
@@ -1409,6 +1411,21 @@
         activeNavBtn.classList.add('bg-royal-crimson', 'text-white', 'shadow');
       }
 
+      // 3. Update Mobile navigation buttons (Brown/Royal Crimson active highlight)
+      document.querySelectorAll('.mob-tab-btn').forEach(b => {
+        b.classList.remove('bg-royal-crimson', 'text-white', 'shadow-md', 'ring-2', 'ring-royal-gold/50');
+        b.classList.add('bg-white', 'text-stone-800', 'border', 'border-royal-gold/30');
+      });
+      const activeMobBtn = document.getElementById('mob-tab-btn-' + tabId);
+      if (activeMobBtn) {
+        activeMobBtn.classList.remove('bg-white', 'text-stone-800', 'border', 'border-royal-gold/30');
+        activeMobBtn.classList.add('bg-royal-crimson', 'text-white', 'shadow-md', 'ring-2', 'ring-royal-gold/50');
+        
+        // Auto scroll mobile nav bar so active button is always in the center
+        activeMobBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+
+      // 4. Smooth scroll to view
       window.scrollTo({ top: 120, behavior: 'smooth' });
     }
 
